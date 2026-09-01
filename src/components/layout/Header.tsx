@@ -51,7 +51,7 @@ export const Header: React.FC<HeaderProps> = ({
   const tabTitles: Record<TabType, { title: string; subtitle: string }> = {
     home: { title: 'Learning Dashboard', subtitle: 'Track your DSA Stack mastery and continue challenges' },
     theory: { title: 'Stack DSA Theory Curriculum', subtitle: '5 core sections from LIFO fundamentals to algorithms & system design' },
-    lab: { title: 'Interactive Stack Visualizer & Lab', subtitle: 'Hands-on drag-and-drop workspace with LIFO operations & real-time feedback' },
+    lab: { title: 'Stack Visualizer', subtitle: 'Hands-on drag-and-drop workspace with LIFO operations & real-time feedback' },
     game: { title: 'Challenges & Interactive Games', subtitle: '6 progressive drag-and-drop levels to test and solidify your skills' },
     quiz: { title: 'Quiz', subtitle: 'Interactive multi-format assessment with instant explanations' },
     progress: { title: 'Learning Progress & Achievements', subtitle: 'Detailed XP telemetry, unlocked badges, and milestones' },
