@@ -1,0 +1,6 @@
+{
+  "name": "Stack Master",
+  "description": "AlgoLearn - YOUR DSA JOURNEY: Interactive Stack & DSA Learning Engine with a 12-chapter Theory curriculum, real-time visualizer lab, gamified challenges, and Quiz.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
