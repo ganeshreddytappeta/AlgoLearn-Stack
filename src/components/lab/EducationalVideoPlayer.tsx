@@ -21,9 +21,11 @@ import {
   CheckCircle2,
   AlertTriangle,
   Film,
+  X,
 } from 'lucide-react';
 import { soundEffects } from '../../services/sound';
 import { LessonData, EducationalScene } from '../../data/labVideoData';
+import { AlgoLearnLogo } from '../common/AlgoLearnLogo';
 
 export type { LessonData, EducationalScene };
 
@@ -31,6 +33,7 @@ interface EducationalVideoPlayerProps {
   activeLesson: LessonData;
   customVideoUrl: string | null;
   customVideoName: string | null;
+  autoPlayTrigger?: number;
   onUploadClick: () => void;
   onLessonComplete?: (lessonId: number) => void;
 }
@@ -39,6 +42,7 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
   activeLesson,
   customVideoUrl,
   customVideoName,
+  autoPlayTrigger,
   onUploadClick,
   onLessonComplete,
 }) => {
@@ -256,6 +260,43 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
     }
   };
 
+  // Fullscreen controls
+  const enterFullscreen = useCallback(() => {
+    setIsFullscreen(true);
+    setFsControlsVisible(true);
+    resetInactivityTimer();
+    if (containerRef.current && !document.fullscreenElement) {
+      containerRef.current.requestFullscreen().catch(() => {});
+    }
+  }, []);
+
+  const exitFullscreen = useCallback(() => {
+    setIsFullscreen(false);
+    setFsControlsVisible(true);
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    }
+  }, []);
+
+  // Ensure when playing starts, it automatically plays in fullscreen
+  useEffect(() => {
+    if (isPlaying && !isFullscreen) {
+      enterFullscreen();
+    }
+  }, [isPlaying, isFullscreen, enterFullscreen]);
+
+  // Handle external autoPlay trigger (e.g. from WATCH LESSON buttons)
+  useEffect(() => {
+    if (autoPlayTrigger && autoPlayTrigger > 0) {
+      enterFullscreen();
+      setIsPlaying(true);
+      if (nativeVideoRef.current) {
+        nativeVideoRef.current.currentTime = 0;
+        nativeVideoRef.current.play().catch(() => {});
+      }
+    }
+  }, [autoPlayTrigger, enterFullscreen]);
+
   // Play / Pause handler
   const handleTogglePlay = () => {
     soundEffects.playClick();
@@ -268,9 +309,13 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
           nativeVideoRef.current.currentTime = 0;
           setCurrentTime(0);
         }
+        enterFullscreen();
         nativeVideoRef.current
           .play()
-          .then(() => setIsPlaying(true))
+          .then(() => {
+            setIsPlaying(true);
+            enterFullscreen();
+          })
           .catch(() => {
             setIsPlaying(false);
           });
@@ -279,6 +324,9 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
       if (!isPlaying && currentTime >= totalDuration) {
         setCurrentTime(0);
         currentSceneIdRef.current = -1;
+      }
+      if (!isPlaying) {
+        enterFullscreen();
       }
       setIsPlaying(!isPlaying);
     }
@@ -289,11 +337,15 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
     soundEffects.playClick();
     setCurrentTime(0);
     currentSceneIdRef.current = -1;
+    enterFullscreen();
     if (isVideoMode && nativeVideoRef.current) {
       nativeVideoRef.current.currentTime = 0;
       nativeVideoRef.current
         .play()
-        .then(() => setIsPlaying(true))
+        .then(() => {
+          setIsPlaying(true);
+          enterFullscreen();
+        })
         .catch(() => {});
     } else {
       setIsPlaying(true);
@@ -331,6 +383,7 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
       if (isVideoMode && nativeVideoRef.current) {
         nativeVideoRef.current.currentTime = targetTime;
       }
+      enterFullscreen();
       setIsPlaying(true);
     }
   };
@@ -348,15 +401,10 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
   const toggleFullscreen = () => {
     soundEffects.playClick();
     if (!containerRef.current) return;
-    if (!document.fullscreenElement) {
-      containerRef.current.requestFullscreen().catch(() => {});
-      setIsFullscreen(true);
-      setFsControlsVisible(true);
-      resetInactivityTimer();
+    if (!document.fullscreenElement && !isFullscreen) {
+      enterFullscreen();
     } else {
-      document.exitFullscreen().catch(() => {});
-      setIsFullscreen(false);
-      setFsControlsVisible(true);
+      exitFullscreen();
     }
   };
 
@@ -555,7 +603,7 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
       }}
       className={`rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden flex flex-col transition-all duration-300 ${
         isFullscreen
-          ? `fixed inset-0 z-50 rounded-none w-screen h-screen bg-slate-950 p-4 sm:p-6 flex flex-col justify-between ${
+          ? `fixed inset-0 z-50 rounded-none w-screen h-screen bg-black p-0 flex flex-col justify-between ${
               !fsControlsVisible && isPlaying ? 'cursor-none' : 'cursor-default'
             }`
           : 'p-5 sm:p-7'
@@ -633,22 +681,44 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
 
             {/* Floating Top Mini HUD */}
             <div
-              className={`absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none transition-opacity duration-200 ${
+              className={`absolute top-3 left-3 right-3 sm:top-5 sm:left-6 sm:right-6 flex items-center justify-between transition-opacity duration-200 z-30 ${
                 isFullscreen
                   ? fsControlsVisible
-                    ? 'opacity-100'
-                    : 'opacity-0'
+                    ? 'opacity-100 pointer-events-auto'
+                    : 'opacity-0 pointer-events-none'
                   : isHoveringVideo || !isPlaying
-                  ? 'opacity-100'
-                  : 'opacity-0'
+                  ? 'opacity-100 pointer-events-auto'
+                  : 'opacity-0 pointer-events-none'
               }`}
             >
-              <span className="px-3 py-1 rounded-lg bg-black/75 backdrop-blur-md text-white text-xs font-mono font-bold border border-white/10">
-                {activeLesson.title}
-              </span>
-              <span className="px-3 py-1 rounded-lg bg-black/75 backdrop-blur-md text-indigo-300 text-xs font-mono font-bold border border-white/10">
-                {formatTime(currentTime)} / {formatTime(totalDuration)}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="px-3 py-1.5 rounded-xl bg-black/80 backdrop-blur-md text-white text-xs font-mono font-bold border border-white/15 shadow-md">
+                  {activeLesson.title}
+                </span>
+                <span className="px-3 py-1.5 rounded-xl bg-black/80 backdrop-blur-md text-indigo-300 text-xs font-mono font-bold border border-white/15 shadow-md">
+                  {formatTime(currentTime)} / {formatTime(totalDuration)}
+                </span>
+              </div>
+
+              {isFullscreen && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    exitFullscreen();
+                  }}
+                  className="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md font-sans text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-lg active:scale-95 transition-all"
+                  title="Exit Fullscreen (Esc or F)"
+                  aria-label="Exit Fullscreen"
+                >
+                  <X className="w-4 h-4" />
+                  <span className="hidden sm:inline">Exit Fullscreen</span>
+                </button>
+              )}
+            </div>
+
+            {/* Bottom-right AlgoLearn Watermark */}
+            <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 pointer-events-none z-20 opacity-90 select-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]">
+              <AlgoLearnLogo size="sm" showSubtitle={true} />
             </div>
           </div>
         ) : (
@@ -667,7 +737,15 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
             />
 
             {/* Top Scene HUD Header */}
-            <div className="relative z-10 flex items-center justify-between gap-2 pointer-events-none">
+            <div
+              className={`relative z-30 flex items-center justify-between gap-2 transition-opacity duration-200 ${
+                isFullscreen
+                  ? fsControlsVisible
+                    ? 'opacity-100 pointer-events-auto'
+                    : 'opacity-0 pointer-events-none'
+                  : 'opacity-100 pointer-events-auto'
+              }`}
+            >
               <div className="flex items-center gap-2">
                 <span className="px-2.5 py-0.5 rounded-md bg-indigo-600/30 text-indigo-300 border border-indigo-500/40 text-[10px] font-mono font-bold uppercase tracking-wider">
                   SCENE {activeScene?.id || 1}/{activeLesson.scenes.length}
@@ -681,9 +759,24 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
                 </span>
               </div>
 
-              <span className="text-[11px] font-mono text-slate-400 font-semibold">
-                {formatTime(currentTime)} / {formatTime(totalDuration)}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-mono text-slate-400 font-semibold px-2 py-0.5 rounded-md bg-black/60 border border-white/10">
+                  {formatTime(currentTime)} / {formatTime(totalDuration)}
+                </span>
+                {isFullscreen && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      exitFullscreen();
+                    }}
+                    className="px-2.5 py-1 rounded-lg bg-white/10 hover:bg-white/20 text-white border border-white/20 backdrop-blur-md text-xs font-bold flex items-center gap-1 cursor-pointer"
+                    title="Exit Fullscreen"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline text-[11px]">Exit</span>
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* Middle Stage: Dynamic Visual Renderers based on Lesson & Scene */}
