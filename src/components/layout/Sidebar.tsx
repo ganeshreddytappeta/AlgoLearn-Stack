@@ -52,17 +52,12 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(({
     id: TabType;
     label: string;
     icon: React.ComponentType<{ className?: string }>;
-    badge: { text: string; bg: string; color: string };
+    badge?: { text: string; bg: string; color: string };
   }[] = [
     {
       id: 'home',
       label: 'Overview',
       icon: LayoutGrid,
-      badge: {
-        text: `${completedActivities}/${totalActivities}`,
-        bg: 'bg-blue-50 dark:bg-blue-950/70',
-        color: 'text-blue-600 dark:text-blue-400',
-      },
     },
     {
       id: 'theory',
@@ -190,41 +185,19 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(({
                   </div>
 
                   {/* Badges: All details show simultaneously when cursor moves towards the navigation bar */}
-                  <span
-                    className={`text-xs font-mono font-bold px-2.5 py-0.5 rounded-full ${item.badge.bg} ${item.badge.color} transition-all duration-200 pointer-events-none select-none shrink-0 ${
-                      isHovered ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-1.5'
-                    }`}
-                  >
-                    {item.badge.text}
-                  </span>
+                  {item.badge && (
+                    <span
+                      className={`text-xs font-mono font-bold px-2.5 py-0.5 rounded-full ${item.badge.bg} ${item.badge.color} transition-all duration-200 pointer-events-none select-none shrink-0 ${
+                        isHovered ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-1.5'
+                      }`}
+                    >
+                      {item.badge.text}
+                    </span>
+                  )}
                 </button>
               );
             })}
           </nav>
-        </div>
-
-        {/* Hover-reveal Total Mastery Telemetry */}
-        <div
-          className={`transition-all duration-300 overflow-hidden shrink-0 ${
-            isHovered
-              ? 'max-h-28 opacity-100 border-t border-slate-200/80 dark:border-slate-800/80 p-3.5 bg-slate-50/80 dark:bg-slate-900/80'
-              : 'max-h-0 opacity-0 p-0 border-t-0'
-          }`}
-        >
-          <div className="flex items-center justify-between text-xs mb-1.5">
-            <span className="font-semibold text-slate-700 dark:text-slate-300">Stack Curriculum</span>
-            <span className="font-mono font-bold text-blue-600 dark:text-blue-400">{masteryPercentage}%</span>
-          </div>
-          <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden mb-1.5">
-            <div
-              className="h-full bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-500 rounded-full transition-all duration-300"
-              style={{ width: `${masteryPercentage}%` }}
-            />
-          </div>
-          <div className="flex justify-between text-[10px] text-slate-400 dark:text-slate-500">
-            <span>{completedActivities} completed</span>
-            <span>{totalActivities} total activities</span>
-          </div>
         </div>
       </div>
     </aside>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Gamepad2, Sparkles, RotateCcw, RefreshCw, LayoutGrid, ArrowLeft, Lightbulb } from 'lucide-react';
+import { Gamepad2, Sparkles, RotateCcw, LayoutGrid, ArrowLeft, Lightbulb } from 'lucide-react';
 import { GameLevelConfig, UserProgress } from '../../types';
 
 interface GameHeaderProps {
@@ -153,16 +153,6 @@ export const GameHeader: React.FC<GameHeaderProps> = ({
             className="w-8 h-8 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition-all flex items-center justify-center cursor-pointer shadow-2xs active:scale-90 shrink-0"
           >
             <RotateCcw className="w-4 h-4 text-slate-600 dark:text-slate-300" />
-          </button>
-
-          {/* Reset Level / Game Button (Icon Only) */}
-          <button
-            onClick={onResetGame || onResetChallenge}
-            title="Reset Level (Restart from Round 1)"
-            aria-label="Reset Level"
-            className="w-8 h-8 rounded-xl bg-slate-100 hover:bg-blue-50 dark:bg-slate-800 dark:hover:bg-blue-950/80 text-blue-600 dark:text-blue-400 border border-slate-200 dark:border-slate-700 hover:border-blue-300 dark:hover:border-blue-700 transition-all flex items-center justify-center cursor-pointer shadow-2xs active:scale-90 shrink-0"
-          >
-            <RefreshCw className="w-4 h-4 text-blue-600 dark:text-blue-400" />
           </button>
         </div>
       </div>

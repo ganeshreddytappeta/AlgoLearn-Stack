@@ -190,31 +190,15 @@ export const GameHub: React.FC<GameHubProps> = ({
                   </span>
                 </div>
 
-                {/* Action Buttons: GUIDED SOLVE & PLAY GAME */}
-                <div className="flex items-center gap-2">
-                  {onOpenGuidedSolve && (
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        soundEffects.playClick();
-                        onOpenGuidedSolve(game.id);
-                      }}
-                      className="px-3 py-2.5 rounded-xl text-xs font-black uppercase tracking-wide transition-all flex items-center justify-center gap-1.5 cursor-pointer border border-amber-300 dark:border-amber-700/80 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/60 dark:hover:bg-amber-900/60 text-amber-900 dark:text-amber-200 active:scale-[0.99] shadow-2xs"
-                      title={`Open Guided Solve for Level ${game.levelNumber}`}
-                    >
-                      <Lightbulb className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                      <span className="hidden sm:inline">GUIDED SOLVE</span>
-                      <span className="sm:hidden">GUIDE</span>
-                    </button>
-                  )}
-
+                {/* Action Button: PLAY GAME */}
+                <div className="pt-1">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       soundEffects.playClick();
                       onDirectContinue(game.id);
                     }}
-                    className={`flex-1 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold uppercase tracking-wide transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-[0.99] ${
+                    className={`w-full py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold uppercase tracking-wide transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-[0.99] ${
                       isCompleted
                         ? 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-slate-200 dark:border-slate-700'
                         : isInProgress

@@ -842,9 +842,9 @@ export const StackAnimatedVideo100s: React.FC<StackAnimatedVideoProps> = ({
               </button>
             </div>
 
-            <div className="font-mono text-xs font-semibold text-slate-300 pl-2">
-              <span>{formatTime(currentTime)}</span>
-              <span className="text-slate-500"> / 01:40</span>
+            <div className="font-mono text-xs font-semibold text-slate-100 pl-2">
+              <span className="text-blue-400 font-bold">{formatTime(currentTime)}</span>
+              <span className="text-slate-300 font-bold"> / 01:40</span>
             </div>
           </div>
 

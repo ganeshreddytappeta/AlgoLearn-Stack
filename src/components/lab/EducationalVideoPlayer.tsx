@@ -958,10 +958,10 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
         onFocusCapture={() => setFsControlsVisible(true)}
         className={`w-full transition-all duration-300 ${
           isFullscreen
-            ? `absolute bottom-4 left-4 right-4 sm:left-8 sm:right-8 z-30 p-4 sm:p-5 rounded-2xl bg-slate-950/85 backdrop-blur-md border border-white/15 shadow-2xl text-white transition-opacity duration-200 ${
+            ? `absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 w-[94%] max-w-4xl lg:max-w-5xl z-40 p-4 sm:p-5 rounded-3xl bg-slate-950/95 backdrop-blur-2xl border border-slate-700/80 shadow-[0_12px_45px_rgba(0,0,0,0.85)] text-white transition-opacity duration-200 ${
                 fsControlsVisible ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
               }`
-            : 'pt-5 mt-2 space-y-3'
+            : 'w-full max-w-5xl mx-auto pt-5 mt-2 space-y-3'
         }`}
       >
         {/* TOP PROGRESS BAR (Draggable Scrubber + Circular Thumb) */}
@@ -981,41 +981,45 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
           >
             {/* Horizontal Track Background */}
             <div
-              className={`w-full h-1.5 sm:h-2 rounded-full transition-all relative overflow-hidden ${
+              className={`w-full h-2 rounded-full transition-all relative overflow-hidden ${
                 isFullscreen
-                  ? 'bg-white/20 group-hover:h-2.5'
-                  : 'bg-slate-200 dark:bg-slate-800 group-hover:h-2.5'
+                  ? 'bg-white/30 group-hover:h-2.5'
+                  : 'bg-slate-300 dark:bg-slate-700 group-hover:h-2.5'
               }`}
             >
               {/* Accent Fill */}
               <div
-                className="h-full bg-blue-600 dark:bg-blue-500 rounded-full transition-[width] duration-75"
+                className="h-full bg-blue-600 dark:bg-blue-400 rounded-full transition-[width] duration-75 shadow-xs"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
 
             {/* Circular Draggable Scrubber Thumb */}
             <div
-              className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-full border-2 border-blue-600 dark:border-blue-400 bg-white shadow-md transition-transform duration-75 pointer-events-none ${
-                isDragging ? 'scale-125 ring-4 ring-blue-500/30' : 'group-hover:scale-110'
+              className={`absolute top-1/2 -translate-y-1/2 w-4.5 h-4.5 sm:w-5 sm:h-5 rounded-full border-2 border-blue-600 dark:border-blue-400 bg-white shadow-md transition-transform duration-75 pointer-events-none ${
+                isDragging ? 'scale-125 ring-4 ring-blue-500/40' : 'group-hover:scale-110'
               }`}
-              style={{ left: `calc(${progressPercent}% - 8px)` }}
+              style={{ left: `calc(${progressPercent}% - 9px)` }}
             />
           </div>
 
           {/* TIME DISPLAY (Left: Current, Right: Total) */}
-          <div className="flex items-center justify-between font-mono text-xs sm:text-sm font-semibold pt-1">
+          <div className="flex items-center justify-between font-mono text-xs sm:text-sm font-semibold pt-1.5">
             <span
-              className={
-                isFullscreen ? 'text-white font-bold' : 'text-slate-900 dark:text-slate-100 font-bold'
-              }
+              className={`px-2.5 py-0.5 rounded-lg transition-colors ${
+                isFullscreen
+                  ? 'text-white bg-black/60 border border-white/20 font-bold'
+                  : 'text-blue-600 dark:text-blue-300 bg-blue-50 dark:bg-slate-900 border border-blue-200/80 dark:border-slate-800 font-bold shadow-2xs'
+              }`}
             >
               {formatTime(currentTime)}
             </span>
             <span
-              className={
-                isFullscreen ? 'text-slate-400 font-medium' : 'text-slate-500 dark:text-slate-400 font-medium'
-              }
+              className={`px-2.5 py-0.5 rounded-lg transition-colors ${
+                isFullscreen
+                  ? 'text-slate-100 bg-black/60 border border-white/20 font-bold'
+                  : 'text-slate-800 dark:text-slate-100 bg-slate-100 dark:bg-slate-900 border border-slate-300 dark:border-slate-800 font-bold shadow-2xs'
+              }`}
             >
               {formatTime(totalDuration)}
             </span>
@@ -1032,7 +1036,7 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
               className={`p-2.5 sm:p-3 rounded-2xl font-bold transition-all flex items-center justify-center cursor-pointer active:scale-95 shadow-2xs group ${
                 isFullscreen
                   ? 'bg-white/10 hover:bg-white/20 text-white border border-white/15'
-                  : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-slate-700/80'
+                  : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-slate-200/80 dark:border-slate-700/80'
               }`}
               title="Rewind 10 seconds"
               aria-label="Rewind 10 seconds"
@@ -1065,7 +1069,7 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
               className={`p-2.5 sm:p-3 rounded-2xl font-bold transition-all flex items-center justify-center cursor-pointer active:scale-95 shadow-2xs group ${
                 isFullscreen
                   ? 'bg-white/10 hover:bg-white/20 text-white border border-white/15'
-                  : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200/80 dark:border-slate-700/80'
+                  : 'bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-100 border border-slate-200/80 dark:border-slate-700/80'
               }`}
               title="Forward 10 seconds"
               aria-label="Forward 10 seconds"
@@ -1090,8 +1094,8 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
                   playbackSpeed === spd
                     ? 'bg-blue-600 text-white shadow-2xs'
                     : isFullscreen
-                    ? 'text-slate-300 hover:text-white'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                    ? 'text-slate-200 hover:text-white'
+                    : 'text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white'
                 }`}
                 aria-label={`Set playback speed to ${spd}x`}
               >

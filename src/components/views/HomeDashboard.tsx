@@ -23,7 +23,6 @@ import {
 } from 'lucide-react';
 import { TabType, UserProgress } from '../../types';
 import { soundEffects } from '../../services/sound';
-import { AlgoLearnLogo } from '../common/AlgoLearnLogo';
 
 interface HomeDashboardProps {
   progress: UserProgress;
@@ -47,8 +46,6 @@ export const HomeDashboard: React.FC<HomeDashboardProps> = ({
           {/* Left Column */}
           <div className="lg:col-span-7 space-y-4">
             <div className="flex items-center gap-2.5 flex-wrap">
-              <AlgoLearnLogo size="sm" showSubtitle={false} />
-              <span className="text-slate-300 dark:text-slate-700 hidden sm:inline">•</span>
               <span className="text-[11px] sm:text-xs font-bold tracking-wider text-blue-600 dark:text-blue-400 uppercase">
                 THEORY CURRICULUM • MODULE 01 • CHAPTER 01
               </span>

@@ -20,7 +20,8 @@ import { DebugAnalysisZone } from '../game/DebugAnalysisZone';
 import { SpeedStackWorkspace } from '../game/SpeedStackWorkspace';
 import { TargetStackDisplay } from '../game/TargetStackDisplay';
 import { InGameLab } from '../game/InGameLab';
-import { GuidedSolveModal } from '../game/GuidedSolveModal';
+import { LiveGuidedSolverPanel } from '../game/LiveGuidedSolverPanel';
+import { generateLiveSolverSteps, LiveSolverStep } from '../../services/liveGuidedSolverEngine';
 
 interface GameViewProps {
   progress: UserProgress;
@@ -38,8 +39,12 @@ export const GameView: React.FC<GameViewProps> = ({
   // Navigation & View Mode: 'hub' (Game Hub), 'playing' (Active Gameplay), or 'lab' (In-Game Experiment Lab)
   const [viewMode, setViewMode] = useState<'hub' | 'playing' | 'lab'>('hub');
   const [selectedGameForPreview, setSelectedGameForPreview] = useState<GameMetaData | null>(null);
-  const [isGuidedSolveOpen, setIsGuidedSolveOpen] = useState<boolean>(false);
-  const [guidedSolveLevelId, setGuidedSolveLevelId] = useState<number>(activeLevelId);
+
+  // Live In-Game Step-by-Step Guided Solve State
+  const [isLiveGuidedSolveActive, setIsLiveGuidedSolveActive] = useState<boolean>(false);
+  const [liveSolverSteps, setLiveSolverSteps] = useState<LiveSolverStep[]>([]);
+  const [liveSolverStepIndex, setLiveSolverStepIndex] = useState<number>(0);
+  const [isLiveGuidePaused, setIsLiveGuidePaused] = useState<boolean>(false);
 
   // Current active level configuration
   const currentLevel: GameLevelConfig =
@@ -75,6 +80,119 @@ export const GameView: React.FC<GameViewProps> = ({
   const [speedScore, setSpeedScore] = useState<number>(0);
   const [speedCombo, setSpeedCombo] = useState<number>(1);
   const [speedStep, setSpeedStep] = useState<number>(0);
+
+  // Applies a specific live solver step's stack & debug state to the real game state
+  const applyLiveStepState = useCallback((step: LiveSolverStep) => {
+    if (!step) return;
+
+    // Synchronize actual stack items
+    const newItems: StackItem[] = step.resultingStack.map((val, idx) => ({
+      id: `live-guided-${idx}-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      value: val,
+      addedAt: Date.now() + idx,
+    }));
+    setActiveStack(newItems);
+
+    // Synchronize available elements if specified
+    if (step.availableElementsAfter) {
+      setAvailableElements([...step.availableElementsAfter]);
+    }
+
+    // Synchronize debug step if in debug mode
+    if (step.operationType === 'DEBUG_LINE') {
+      if (step.isFaulty) {
+        setIdentifiedStep({
+          id: step.debugLineId,
+          text: step.debugLineText,
+          isFaulty: true,
+          explanation: step.actionDescription,
+        });
+        setWrongStepAttempted(null);
+      } else {
+        setIdentifiedStep(null);
+        setWrongStepAttempted(null);
+      }
+    }
+  }, []);
+
+  // Launch live guided solver for the current challenge
+  const handleStartLiveGuidedSolve = (levelId?: number) => {
+    soundEffects.playClick();
+    const targetLevelId = levelId || activeLevelId;
+    if (targetLevelId !== activeLevelId) {
+      handleSelectLevel(targetLevelId);
+    }
+    const targetLevel = GAME_LEVELS.find((l) => l.id === targetLevelId) || currentLevel;
+    const targetChallenge =
+      (targetLevelId === activeLevelId ? currentChallenge : targetLevel.challenges?.[0]) || currentChallenge;
+
+    const steps = generateLiveSolverSteps(targetChallenge, targetLevel);
+    setLiveSolverSteps(steps);
+    setLiveSolverStepIndex(0);
+    setIsLiveGuidePaused(false);
+    setIsLiveGuidedSolveActive(true);
+    setFeedbackStatus(null);
+
+    // Apply the first step's state immediately
+    if (steps.length > 0) {
+      applyLiveStepState(steps[0]);
+    }
+  };
+
+  // Advance to next live guided step
+  const handleLiveNextStep = () => {
+    if (liveSolverStepIndex < liveSolverSteps.length - 1) {
+      const nextIdx = liveSolverStepIndex + 1;
+      const nextStep = liveSolverSteps[nextIdx];
+
+      if (nextStep.operationType === 'PUSH') soundEffects.playPush();
+      else if (nextStep.operationType === 'POP') soundEffects.playPop();
+      else if (nextStep.operationType === 'FINAL') soundEffects.playSuccess();
+      else soundEffects.playClick();
+
+      setLiveSolverStepIndex(nextIdx);
+      applyLiveStepState(nextStep);
+    }
+  };
+
+  // Go back to previous live guided step
+  const handleLivePrevStep = () => {
+    if (liveSolverStepIndex > 0) {
+      const prevIdx = liveSolverStepIndex - 1;
+      const prevStep = liveSolverSteps[prevIdx];
+      soundEffects.playClick();
+      setLiveSolverStepIndex(prevIdx);
+      applyLiveStepState(prevStep);
+    }
+  };
+
+  // Exit live guided solver and restore challenge state
+  const handleLiveExitGuide = () => {
+    soundEffects.playClick();
+    setIsLiveGuidedSolveActive(false);
+    setLiveSolverSteps([]);
+    setLiveSolverStepIndex(0);
+    if (currentChallenge) {
+      setupChallenge(currentChallenge);
+    }
+  };
+
+  // Try it yourself: reset problem to initial state and return to normal play
+  const handleLiveTryItYourself = () => {
+    soundEffects.playClick();
+    setIsLiveGuidedSolveActive(false);
+    setLiveSolverSteps([]);
+    setLiveSolverStepIndex(0);
+    if (currentChallenge) {
+      setupChallenge(currentChallenge);
+    }
+  };
+
+  // Toggle pause on live guide
+  const handleToggleLivePause = () => {
+    soundEffects.playClick();
+    setIsLiveGuidePaused((p) => !p);
+  };
 
   // Initialize or Reset Challenge State
   const setupChallenge = useCallback((challenge: GameChallenge) => {
@@ -540,27 +658,13 @@ export const GameView: React.FC<GameViewProps> = ({
   };
 
   const handleOpenGuidedSolve = (levelId?: number) => {
-    soundEffects.playClick();
-    setGuidedSolveLevelId(levelId || activeLevelId);
-    setIsGuidedSolveOpen(true);
+    handleStartLiveGuidedSolve(levelId);
   };
 
   // If in Hub view mode, render the Game Hub and Game Preview modal
   if (viewMode === 'hub') {
     return (
       <div className="w-full">
-        {/* Interactive Guided Solve Modal */}
-        <GuidedSolveModal
-          isOpen={isGuidedSolveOpen}
-          levelId={guidedSolveLevelId}
-          onClose={() => setIsGuidedSolveOpen(false)}
-          onTryLevel={(lvlId) => {
-            setIsGuidedSolveOpen(false);
-            handleSelectLevel(lvlId);
-            setViewMode('playing');
-          }}
-        />
-
         <GameHub
           progress={progress}
           activeLevelId={activeLevelId}
@@ -573,7 +677,8 @@ export const GameView: React.FC<GameViewProps> = ({
             setViewMode('playing');
           }}
           onOpenGuidedSolve={(levelId) => {
-            handleOpenGuidedSolve(levelId);
+            handleStartLiveGuidedSolve(levelId);
+            setViewMode('playing');
           }}
           onOpenInGameLab={() => {
             soundEffects.playClick();
@@ -601,7 +706,8 @@ export const GameView: React.FC<GameViewProps> = ({
           }}
           onOpenGuidedSolve={(gameId) => {
             setSelectedGameForPreview(null);
-            handleOpenGuidedSolve(gameId);
+            handleStartLiveGuidedSolve(gameId);
+            setViewMode('playing');
           }}
         />
       </div>
@@ -629,17 +735,6 @@ export const GameView: React.FC<GameViewProps> = ({
 
   return (
     <div className="space-y-4 max-w-4xl mx-auto animate-in fade-in duration-200">
-      {/* Interactive Guided Solve Modal */}
-      <GuidedSolveModal
-        isOpen={isGuidedSolveOpen}
-        levelId={guidedSolveLevelId}
-        onClose={() => setIsGuidedSolveOpen(false)}
-        onTryLevel={(lvlId) => {
-          setIsGuidedSolveOpen(false);
-          handleSelectLevel(lvlId);
-        }}
-      />
-
       {/* Level Completed Celebration Modal */}
       <LevelCompleteModal
         isOpen={levelCompletedModalOpen}
@@ -685,21 +780,40 @@ export const GameView: React.FC<GameViewProps> = ({
           soundEffects.playClick();
           setViewMode('lab');
         }}
-        onOpenGuidedSolve={() => handleOpenGuidedSolve(activeLevelId)}
-        onSelectLevel={handleSelectLevel}
+        onOpenGuidedSolve={() => handleStartLiveGuidedSolve(activeLevelId)}
+        onSelectLevel={(lvlId) => {
+          setIsLiveGuidedSolveActive(false);
+          handleSelectLevel(lvlId);
+        }}
         onResetChallenge={handleResetChallenge}
         onResetGame={handleResetGame}
         onBackToHub={() => {
           soundEffects.playClick();
+          setIsLiveGuidedSolveActive(false);
           setViewMode('hub');
         }}
       />
 
-      {/* 2. Focused Question Card */}
+      {/* 2. Live Step-by-Step Guided Solve Panel (Embedded directly inside existing game layout) */}
+      {isLiveGuidedSolveActive && liveSolverSteps.length > 0 && (
+        <LiveGuidedSolverPanel
+          currentStep={liveSolverSteps[liveSolverStepIndex] || liveSolverSteps[0]}
+          currentStepIndex={liveSolverStepIndex}
+          totalSteps={liveSolverSteps.length}
+          isPaused={isLiveGuidePaused}
+          onTogglePause={handleToggleLivePause}
+          onNextStep={handleLiveNextStep}
+          onPrevStep={handleLivePrevStep}
+          onExitGuide={handleLiveExitGuide}
+          onTryItYourself={handleLiveTryItYourself}
+        />
+      )}
+
+      {/* 3. Focused Question Card */}
       {currentChallenge && (
         <QuestionCard
           challenge={currentChallenge}
-          onOpenGuidedSolve={() => handleOpenGuidedSolve(activeLevelId)}
+          onOpenGuidedSolve={() => handleStartLiveGuidedSolve(activeLevelId)}
         />
       )}
 
