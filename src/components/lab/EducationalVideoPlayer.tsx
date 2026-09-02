@@ -25,7 +25,6 @@ import {
 } from 'lucide-react';
 import { soundEffects } from '../../services/sound';
 import { LessonData, EducationalScene } from '../../data/labVideoData';
-import { AlgoLearnLogo } from '../common/AlgoLearnLogo';
 
 export type { LessonData, EducationalScene };
 
@@ -714,11 +713,6 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
                   <span className="hidden sm:inline">Exit Fullscreen</span>
                 </button>
               )}
-            </div>
-
-            {/* Bottom-right AlgoLearn Watermark */}
-            <div className="absolute bottom-4 right-4 sm:bottom-6 sm:right-6 pointer-events-none z-20 opacity-90 select-none drop-shadow-[0_2px_10px_rgba(0,0,0,0.85)]">
-              <AlgoLearnLogo size="sm" showSubtitle={true} />
             </div>
           </div>
         ) : (
