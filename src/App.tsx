@@ -11,6 +11,7 @@ import { GameView } from './components/views/GameView';
 import { QuizView } from './components/views/QuizView';
 import { ProgressView } from './components/views/ProgressView';
 import { ResetConfirmationModal } from './components/common/ResetConfirmationModal';
+import { ChatbotLogo } from './components/common/ChatbotLogo';
 import { CheckCircle2, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -197,6 +198,16 @@ export default function App() {
             />
           )}
         </main>
+      </div>
+
+      {/* Floating Chatbot Assistant Logo (Bottom-Right) */}
+      <div className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-40 transition-transform active:scale-95">
+        <ChatbotLogo
+          size={56}
+          onClick={() => {
+            soundEffects.playClick();
+          }}
+        />
       </div>
 
       {/* Total Reset Confirmation Modal */}
