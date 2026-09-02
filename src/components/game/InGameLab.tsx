@@ -539,7 +539,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
         <div className="bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-              <span className="text-[11px] font-extrabold uppercase tracking-widest text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-950/70 px-2.5 py-0.5 rounded-full border border-violet-200 dark:border-violet-800">
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/70 px-2.5 py-0.5 rounded-full border border-blue-200 dark:border-blue-800">
                 Interactive Lab
               </span>
               <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
@@ -547,7 +547,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
               </span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight flex items-center gap-2.5">
-              <FlaskConical className="w-7 h-7 text-violet-600 dark:text-violet-400" />
+              <FlaskConical className="w-7 h-7 text-blue-600 dark:text-blue-400" />
               Stack Experimentation Lab
             </h1>
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 mt-1">
@@ -560,7 +560,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
             <div className="flex items-center gap-2 shrink-0">
               <button
                 onClick={onBackToGame}
-                className="px-4 py-2.5 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm transition-all shadow-sm hover:shadow flex items-center gap-2 cursor-pointer active:scale-95"
+                className="px-4 py-2.5 rounded-2xl bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-600 hover:from-blue-800 hover:to-indigo-700 text-white font-bold text-xs sm:text-sm transition-all shadow-sm hover:shadow flex items-center gap-2 cursor-pointer active:scale-95"
               >
                 <ArrowLeft className="w-4 h-4" />
                 <span>Return to Challenges</span>
@@ -576,7 +576,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
       <div className="bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-violet-100 dark:bg-violet-950/80 text-violet-600 dark:text-violet-400 flex items-center justify-center font-bold">
+            <div className="w-8 h-8 rounded-xl bg-blue-100 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 flex items-center justify-center font-bold">
               <Sliders className="w-4 h-4" />
             </div>
             <div>
@@ -592,9 +592,9 @@ export const InGameLab: React.FC<InGameLabProps> = ({
           {/* Quick Capacity Display */}
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold text-slate-400 uppercase">Current Sizing:</span>
-            <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-violet-50 dark:bg-violet-950/80 border border-violet-200 dark:border-violet-800 font-mono font-black text-xs text-violet-700 dark:text-violet-300">
+            <div className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-blue-50 dark:bg-blue-950/80 border border-blue-200 dark:border-blue-800 font-mono font-black text-xs text-blue-700 dark:text-blue-300">
               <span>{items.length} Used</span>
-              <span className="text-violet-400">/</span>
+              <span className="text-blue-400">/</span>
               <span>{capacity} Max Slots</span>
             </div>
           </div>
@@ -606,7 +606,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
           <div className="md:col-span-7 space-y-2">
             <div className="flex items-center justify-between text-xs font-bold text-slate-600 dark:text-slate-300">
               <span>Capacity Range (2 to 20 slots)</span>
-              <span className="font-mono text-violet-600 dark:text-violet-400 font-black">
+              <span className="font-mono text-blue-600 dark:text-blue-400 font-black">
                 {capacity} Slots
               </span>
             </div>
@@ -627,7 +627,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                 max={20}
                 value={capacity}
                 onChange={(e) => handleSetCapacity(Number(e.target.value))}
-                className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-violet-600"
+                className="w-full h-2 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-600"
               />
 
               <button
@@ -653,7 +653,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                   onClick={() => handleSetCapacity(cap)}
                   className={`px-3 py-1 rounded-xl text-xs font-black font-mono transition-all cursor-pointer ${
                     capacity === cap
-                      ? 'bg-violet-600 text-white shadow-2xs'
+                      ? 'bg-blue-600 text-white shadow-2xs'
                       : 'bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300'
                   }`}
                 >
@@ -695,7 +695,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                   ? 'bg-red-500 dark:bg-red-600'
                   : items.length / capacity > 0.75
                   ? 'bg-amber-500 dark:bg-amber-600'
-                  : 'bg-gradient-to-r from-violet-500 to-indigo-600'
+                  : 'bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600'
               }`}
             />
           </div>
@@ -715,7 +715,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                 onClick={() => setVisualMode('canister')}
                 className={`px-3.5 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
                   visualMode === 'canister'
-                    ? 'bg-violet-600 text-white shadow-2xs'
+                    ? 'bg-blue-600 text-white shadow-2xs'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
@@ -727,7 +727,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                 onClick={() => setVisualMode('array')}
                 className={`px-3.5 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
                   visualMode === 'array'
-                    ? 'bg-violet-600 text-white shadow-2xs'
+                    ? 'bg-blue-600 text-white shadow-2xs'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
@@ -739,7 +739,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                 onClick={() => setVisualMode('experiments')}
                 className={`px-3.5 py-1.5 rounded-xl font-bold text-xs flex items-center gap-1.5 transition-all cursor-pointer ${
                   visualMode === 'experiments'
-                    ? 'bg-violet-600 text-white shadow-2xs'
+                    ? 'bg-blue-600 text-white shadow-2xs'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                 }`}
               >
@@ -807,7 +807,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
             <div className="bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
               <div>
                 <h3 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                  <Binary className="w-4 h-4 text-violet-600 dark:text-violet-400" />
+                  <Binary className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                   Contiguous Array Memory Buffer
                 </h3>
                 <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -827,7 +827,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                         key={idx}
                         className={`w-16 flex flex-col items-center rounded-2xl p-2.5 border transition-all ${
                           isTop
-                            ? 'bg-violet-600 text-white border-violet-500 ring-2 ring-violet-300 dark:ring-violet-900 shadow-md scale-105'
+                            ? 'bg-blue-600 text-white border-blue-500 ring-2 ring-blue-300 dark:ring-blue-900 shadow-md scale-105'
                             : isAllocated
                             ? 'bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border-slate-300 dark:border-slate-700'
                             : 'bg-slate-50 dark:bg-slate-950/40 text-slate-300 dark:text-slate-700 border-dashed border-slate-200 dark:border-slate-800'
@@ -847,7 +847,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                         <span
                           className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-md mt-1 ${
                             isTop
-                              ? 'bg-violet-700 text-violet-100'
+                              ? 'bg-blue-700 text-blue-100'
                               : isAllocated
                               ? 'bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300'
                               : 'bg-transparent text-slate-400 dark:text-slate-600'
@@ -870,7 +870,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-3 border-t border-slate-100 dark:border-slate-800 text-xs">
                 <div className="p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700">
                   <span className="text-[10px] uppercase font-bold text-slate-400 block">Stack Pointer</span>
-                  <span className="font-mono font-bold text-violet-600 dark:text-violet-400">
+                  <span className="font-mono font-bold text-blue-600 dark:text-blue-400">
                     {items.length > 0 ? `Index [${items.length - 1}]` : 'NULL (-1)'}
                   </span>
                 </div>
@@ -912,7 +912,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                     onClick={() => setActiveExperiment('overflow')}
                     className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
                       activeExperiment === 'overflow'
-                        ? 'bg-violet-600 text-white'
+                        ? 'bg-blue-600 text-white'
                         : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
                     }`}
                   >
@@ -922,7 +922,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                     onClick={() => setActiveExperiment('underflow')}
                     className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
                       activeExperiment === 'underflow'
-                        ? 'bg-violet-600 text-white'
+                        ? 'bg-blue-600 text-white'
                         : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
                     }`}
                   >
@@ -932,7 +932,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                     onClick={() => setActiveExperiment('inversion')}
                     className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
                       activeExperiment === 'inversion'
-                        ? 'bg-violet-600 text-white'
+                        ? 'bg-blue-600 text-white'
                         : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
                     }`}
                   >
@@ -942,7 +942,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                     onClick={() => setActiveExperiment('brackets')}
                     className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
                       activeExperiment === 'brackets'
-                        ? 'bg-violet-600 text-white'
+                        ? 'bg-blue-600 text-white'
                         : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
                     }`}
                   >
@@ -952,7 +952,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                     onClick={() => setActiveExperiment('undo')}
                     className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
                       activeExperiment === 'undo'
-                        ? 'bg-violet-600 text-white'
+                        ? 'bg-blue-600 text-white'
                         : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300'
                     }`}
                   >
@@ -1037,7 +1037,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
               {/* Experiment 3: Inversion */}
               {activeExperiment === 'inversion' && (
                 <div className="space-y-3 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 text-xs">
-                  <div className="flex items-center gap-2 text-violet-600 dark:text-violet-400 font-bold text-sm">
+                  <div className="flex items-center gap-2 text-blue-600 dark:text-blue-400 font-bold text-sm">
                     <ArrowUpDown className="w-4 h-4" />
                     <span>Experiment: LIFO Sequence Inversion</span>
                   </div>
@@ -1060,13 +1060,13 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                           message: 'Pop elements sequentially or click Reverse to observe LIFO inversion.',
                         });
                       }}
-                      className="px-3 py-1.5 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-xl transition-all cursor-pointer"
+                      className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all cursor-pointer"
                     >
                       Load [1, 2, 3, 4]
                     </button>
                     <button
                       onClick={handleReverseStack}
-                      className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl transition-all cursor-pointer"
+                      className="px-3 py-1.5 bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-600 hover:from-blue-800 hover:to-indigo-700 text-white font-bold rounded-xl transition-all cursor-pointer"
                     >
                       Reverse Stack
                     </button>
@@ -1081,7 +1081,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                     <span className="font-bold text-sm text-slate-900 dark:text-white">
                       Token Stream: {bracketString}
                     </span>
-                    <span className="font-mono text-violet-600 dark:text-violet-400 font-bold">
+                    <span className="font-mono text-blue-600 dark:text-blue-400 font-bold">
                       Step {bracketStep}/{bracketTokens.length}
                     </span>
                   </div>
@@ -1092,7 +1092,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                         key={idx}
                         className={`w-7 h-7 rounded-lg flex items-center justify-center font-mono font-black text-sm border ${
                           idx === bracketStep
-                            ? 'bg-violet-600 text-white border-violet-500 ring-2 ring-violet-300 dark:ring-violet-900'
+                            ? 'bg-blue-600 text-white border-blue-500 ring-2 ring-blue-300 dark:ring-blue-900'
                             : idx < bracketStep
                             ? 'bg-slate-200 dark:bg-slate-700 text-slate-500 border-slate-300 dark:border-slate-600'
                             : 'bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-200 border-slate-200 dark:border-slate-700'
@@ -1135,7 +1135,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                         }
                         setBracketStep((s) => s + 1);
                       }}
-                      className="px-3 py-1.5 bg-violet-600 hover:bg-violet-700 text-white font-bold rounded-xl transition-all cursor-pointer"
+                      className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl transition-all cursor-pointer"
                     >
                       {bracketStep >= bracketTokens.length ? 'Restart Sim' : 'Step Next Token'}
                     </button>
@@ -1155,7 +1155,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                   <div className="grid grid-cols-2 gap-3 text-[11px]">
                     <div className="p-2.5 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
                       <span className="font-bold text-slate-500 uppercase block mb-1">Undo Stack:</span>
-                      <span className="font-mono text-violet-600 dark:text-violet-400 font-bold">
+                      <span className="font-mono text-blue-600 dark:text-blue-400 font-bold">
                         [{undoStack.join(', ')}]
                       </span>
                     </div>
@@ -1178,7 +1178,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                         soundEffects.playPop();
                       }}
                       disabled={undoStack.length === 0}
-                      className="px-3 py-1.5 bg-violet-600 hover:bg-violet-700 disabled:opacity-40 text-white font-bold rounded-xl transition-all cursor-pointer"
+                      className="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 disabled:opacity-40 text-white font-bold rounded-xl transition-all cursor-pointer"
                     >
                       Undo (Ctrl+Z)
                     </button>
@@ -1209,7 +1209,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
           <div className="bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-5">
             <div>
               <h2 className="text-sm font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-2">
-                <Zap className="w-4 h-4 text-violet-600 dark:text-violet-400" />
+                <Zap className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 Operations Command Deck
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
@@ -1236,7 +1236,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                       setCustomInputValue('');
                     }
                   }}
-                  className="flex-1 px-3.5 py-2 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-mono font-bold text-xs sm:text-sm outline-hidden focus:ring-2 focus:ring-violet-500"
+                  className="flex-1 px-3.5 py-2 rounded-2xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-900 dark:text-white font-mono font-bold text-xs sm:text-sm outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
 
                 <button
@@ -1249,7 +1249,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                     }
                   }}
                   disabled={!customInputValue.trim()}
-                  className="px-4 py-2 rounded-2xl bg-violet-600 hover:bg-violet-700 text-white font-bold text-xs sm:text-sm disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer shadow-2xs active:scale-95 flex items-center gap-1.5"
+                  className="px-4 py-2 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer shadow-2xs active:scale-95 flex items-center gap-1.5"
                 >
                   <ArrowDownToLine className="w-4 h-4" />
                   <span>PUSH</span>
@@ -1263,7 +1263,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                   <button
                     key={num}
                     onClick={() => handlePush(num)}
-                    className="px-2 py-0.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-violet-100 dark:hover:bg-violet-950/70 text-slate-700 dark:text-slate-300 hover:text-violet-700 dark:hover:text-violet-300 font-mono font-bold text-xs transition-colors cursor-pointer"
+                    className="px-2 py-0.5 rounded-lg bg-slate-100 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-blue-950/70 text-slate-700 dark:text-slate-300 hover:text-blue-700 dark:hover:text-blue-300 font-mono font-bold text-xs transition-colors cursor-pointer"
                   >
                     +{num}
                   </button>
@@ -1404,7 +1404,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') handleSearchValue();
                   }}
-                  className="flex-1 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono font-bold outline-hidden focus:ring-2 focus:ring-violet-500"
+                  className="flex-1 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-mono font-bold outline-hidden focus:ring-2 focus:ring-blue-500"
                 />
                 <button
                   onClick={handleSearchValue}
@@ -1437,7 +1437,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                 ? 'bg-amber-50 dark:bg-amber-950/50 border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-200'
                 : feedback.type === 'success'
                 ? 'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800 text-emerald-900 dark:text-emerald-200'
-                : 'bg-violet-50 dark:bg-violet-950/50 border-violet-200 dark:border-violet-800 text-violet-900 dark:text-violet-200'
+                : 'bg-blue-50 dark:bg-blue-950/50 border-blue-200 dark:border-blue-800 text-blue-900 dark:text-blue-200'
             }`}
           >
             <div className="flex items-start gap-2.5">
@@ -1445,7 +1445,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                 {feedback.type === 'error' && <AlertTriangle className="w-5 h-5 text-red-600 dark:text-red-400" />}
                 {feedback.type === 'warning' && <AlertTriangle className="w-5 h-5 text-amber-600 dark:text-amber-400" />}
                 {feedback.type === 'success' && <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />}
-                {feedback.type === 'info' && <Info className="w-5 h-5 text-violet-600 dark:text-violet-400" />}
+                {feedback.type === 'info' && <Info className="w-5 h-5 text-blue-600 dark:text-blue-400" />}
               </div>
               <div className="space-y-1">
                 <h4 className="text-xs font-black uppercase tracking-wider">{feedback.title}</h4>
@@ -1458,7 +1458,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
           <div className="bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-5 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider flex items-center gap-1.5">
-                <History className="w-3.5 h-3.5 text-violet-600 dark:text-violet-400" />
+                <History className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
                 Live Operation Trace
               </span>
               <span className="text-[11px] font-mono text-slate-400 font-bold">
@@ -1476,7 +1476,7 @@ export const InGameLab: React.FC<InGameLabProps> = ({
                     <span
                       className={`px-1.5 py-0.5 rounded text-[10px] font-mono font-black shrink-0 ${
                         log.operation === 'PUSH'
-                          ? 'bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-300'
+                          ? 'bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300'
                           : log.operation === 'POP'
                           ? 'bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300'
                           : log.operation === 'PEEK'

@@ -188,7 +188,7 @@ export const TheoryView: React.FC<TheoryViewProps> = ({
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
           <div className="space-y-2 max-w-3xl">
             <div className="flex items-center gap-2">
-              <span className="text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border border-indigo-200/60 dark:border-indigo-800">
+              <span className="text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800">
                 Visual DSA Learning Module
               </span>
               <span className="text-[11px] font-bold text-slate-400 font-mono">
@@ -207,10 +207,10 @@ export const TheoryView: React.FC<TheoryViewProps> = ({
           <div className="bg-slate-50 dark:bg-slate-800/80 p-4 sm:p-5 rounded-2xl border border-slate-200/80 dark:border-slate-700/80 min-w-[260px] space-y-3">
             <div className="flex items-center justify-between text-xs sm:text-sm font-bold">
               <span className="text-slate-700 dark:text-slate-200 flex items-center gap-1.5 font-mono">
-                <BookOpen className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                <BookOpen className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                 Progress
               </span>
-              <span className="text-indigo-600 dark:text-indigo-400 font-mono font-bold">
+              <span className="text-blue-600 dark:text-blue-400 font-mono font-bold">
                 {completedCount} / {totalChapters} Chapters ({progressPercentage}%)
               </span>
             </div>
@@ -221,7 +221,7 @@ export const TheoryView: React.FC<TheoryViewProps> = ({
                 initial={{ width: 0 }}
                 animate={{ width: `${progressPercentage}%` }}
                 transition={{ duration: 0.6, ease: 'easeOut' }}
-                className="bg-linear-to-r from-indigo-500 to-purple-600 h-full rounded-full"
+                className="bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-500 h-full rounded-full"
               />
             </div>
 
@@ -240,12 +240,12 @@ export const TheoryView: React.FC<TheoryViewProps> = ({
           className="w-full flex items-center justify-between px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl text-sm font-bold text-slate-800 dark:text-slate-100 shadow-2xs cursor-pointer"
         >
           <div className="flex items-center gap-2 truncate font-mono">
-            <ListOrdered className="w-4 h-4 text-indigo-600 dark:text-indigo-400 shrink-0" />
+            <ListOrdered className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
             <span className="truncate">
               Chapter {currentChapter.chapterNumber}: {currentChapter.title}
             </span>
           </div>
-          <span className="text-xs text-indigo-600 dark:text-indigo-400 font-semibold shrink-0 ml-2">
+          <span className="text-xs text-blue-600 dark:text-blue-400 font-semibold shrink-0 ml-2">
             {showMobileToc ? 'Close TOC' : 'View All 12 Chapters'}
           </span>
         </button>
@@ -267,11 +267,11 @@ export const TheoryView: React.FC<TheoryViewProps> = ({
                     onClick={() => handleSelectChapter(idx)}
                     className={`w-full text-left p-3 rounded-xl flex items-start gap-3 transition-colors cursor-pointer ${
                       isActive
-                        ? 'bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 font-bold border border-indigo-200 dark:border-indigo-800'
+                        ? 'bg-blue-50 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 font-bold border border-blue-200 dark:border-blue-800'
                         : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800'
                     }`}
                   >
-                    <span className="font-mono text-xs font-bold text-indigo-600 dark:text-indigo-400">
+                    <span className="font-mono text-xs font-bold text-blue-600 dark:text-blue-400">
                       {ch.chapterNumber || (idx + 1 < 10 ? `0${idx + 1}` : idx + 1)}
                     </span>
                     <div className="flex-1 min-w-0">
@@ -299,7 +299,7 @@ export const TheoryView: React.FC<TheoryViewProps> = ({
         <aside className="hidden lg:block lg:col-span-4 sticky top-20 bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-4 shadow-xs max-h-[calc(100vh-6rem)] overflow-y-auto space-y-3">
           <div className="flex items-center justify-between px-3 py-2 border-b border-slate-100 dark:border-slate-800">
             <div className="flex items-center gap-2">
-              <ListOrdered className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+              <ListOrdered className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               <span className="text-xs font-mono font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-200">
                 Curriculum (12 Chapters)
               </span>
@@ -320,7 +320,7 @@ export const TheoryView: React.FC<TheoryViewProps> = ({
                   onClick={() => handleSelectChapter(index)}
                   className={`w-full text-left p-3 rounded-2xl transition-all relative flex items-start gap-3 cursor-pointer group ${
                     isActive
-                      ? 'bg-indigo-50/90 dark:bg-indigo-950/70 border-l-4 border-indigo-600 dark:border-indigo-400 border border-indigo-200/80 dark:border-indigo-900/60 shadow-xs'
+                      ? 'bg-blue-50/90 dark:bg-blue-950/70 border-l-4 border-blue-600 dark:border-blue-400 border border-blue-200/80 dark:border-blue-900/60 shadow-xs'
                       : 'hover:bg-slate-50 dark:hover:bg-slate-800/60 border border-transparent text-slate-600 dark:text-slate-400'
                   }`}
                 >
@@ -328,8 +328,8 @@ export const TheoryView: React.FC<TheoryViewProps> = ({
                   <div
                     className={`font-mono text-xs font-extrabold shrink-0 mt-0.5 px-2 py-0.5 rounded-md ${
                       isActive
-                        ? 'bg-indigo-600 text-white'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-900 group-hover:text-indigo-600'
+                        ? 'bg-blue-600 text-white'
+                        : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 group-hover:bg-blue-100 dark:group-hover:bg-blue-900 group-hover:text-blue-600'
                     }`}
                   >
                     {chapterNumStr}
@@ -340,8 +340,8 @@ export const TheoryView: React.FC<TheoryViewProps> = ({
                     <h2
                       className={`text-xs font-bold truncate leading-tight ${
                         isActive
-                          ? 'text-indigo-950 dark:text-white'
-                          : 'text-slate-800 dark:text-slate-200 group-hover:text-indigo-600 dark:group-hover:text-indigo-300'
+                          ? 'text-blue-950 dark:text-white'
+                          : 'text-slate-800 dark:text-slate-200 group-hover:text-blue-600 dark:group-hover:text-blue-300'
                       }`}
                     >
                       {chapter.title}
@@ -358,7 +358,7 @@ export const TheoryView: React.FC<TheoryViewProps> = ({
                         <CheckCircle2 className="w-4 h-4" />
                       </span>
                     ) : isActive ? (
-                      <span className="w-2 h-2 rounded-full bg-indigo-600 dark:bg-indigo-400 animate-pulse block" title="Active" />
+                      <span className="w-2 h-2 rounded-full bg-blue-600 dark:bg-blue-400 animate-pulse block" title="Active" />
                     ) : (
                       <Circle className="w-3.5 h-3.5 text-slate-300 dark:text-slate-700" title="Not Started" />
                     )}
@@ -376,7 +376,7 @@ export const TheoryView: React.FC<TheoryViewProps> = ({
           <div className="bg-white dark:bg-slate-900 rounded-3xl border border-slate-200/90 dark:border-slate-800 p-6 sm:p-8 shadow-xs space-y-7">
             {/* 1. Header Bar: Chapter Label & Read Time */}
             <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-              <span className="font-mono text-xs font-extrabold uppercase tracking-widest text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/80 px-3 py-1 rounded-lg border border-indigo-100 dark:border-indigo-900/60">
+              <span className="font-mono text-xs font-extrabold uppercase tracking-widest text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/80 px-3 py-1 rounded-lg border border-blue-100 dark:border-blue-900/60">
                 CHAPTER {currentChapter.chapterNumber} // {currentChapter.categoryLabel || 'FUNDAMENTALS'}
               </span>
               <div className="flex items-center gap-1.5 text-xs text-slate-400 dark:text-slate-500 font-mono">
@@ -399,9 +399,9 @@ export const TheoryView: React.FC<TheoryViewProps> = ({
                 STEP 1: CONCEPT & EXECUTIVE DEFINITION
                 ================================================================= */}
             {currentChapter.executiveDefinition && (
-              <div className="p-4 sm:p-5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border-l-4 border-indigo-600 dark:border-indigo-500 border border-slate-200/80 dark:border-slate-700/80 space-y-2">
+              <div className="p-4 sm:p-5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border-l-4 border-blue-600 dark:border-blue-500 border border-slate-200/80 dark:border-slate-700/80 space-y-2">
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-mono font-extrabold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950 px-2 py-0.5 rounded">
+                  <span className="text-[11px] font-mono font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950 px-2 py-0.5 rounded">
                     1. CORE CONCEPT
                   </span>
                 </div>
@@ -459,8 +459,8 @@ export const TheoryView: React.FC<TheoryViewProps> = ({
 
               {/* Real-World Analogy */}
               {currentChapter.analogy && (
-                <div className="p-4 sm:p-5 bg-indigo-50/60 dark:bg-indigo-950/30 rounded-2xl border border-indigo-100 dark:border-indigo-900/60 space-y-1.5">
-                  <div className="flex items-center gap-2 text-indigo-700 dark:text-indigo-300">
+                <div className="p-4 sm:p-5 bg-blue-50/60 dark:bg-blue-950/30 rounded-2xl border border-blue-100 dark:border-blue-900/60 space-y-1.5">
+                  <div className="flex items-center gap-2 text-blue-700 dark:text-blue-300">
                     <Lightbulb className="w-4 h-4 text-amber-500 shrink-0" />
                     <span className="text-xs font-mono font-bold uppercase tracking-wider">
                       Intuition: {currentChapter.analogy.title}
@@ -480,7 +480,7 @@ export const TheoryView: React.FC<TheoryViewProps> = ({
               <div className="space-y-2">
                 <div className="flex items-center justify-between pb-1">
                   <div className="flex items-center gap-2">
-                    <Layers className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                    <Layers className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                     <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
                       2. Visual Diagram: {currentChapter.visualDiagram.operationLabel}
                     </span>
@@ -490,7 +490,7 @@ export const TheoryView: React.FC<TheoryViewProps> = ({
                   </span>
                 </div>
 
-                <div className="p-4 bg-slate-950 text-indigo-200 rounded-2xl border border-slate-800 font-mono text-xs overflow-x-auto shadow-inner">
+                <div className="p-4 bg-slate-950 text-blue-200 rounded-2xl border border-slate-800 font-mono text-xs overflow-x-auto shadow-inner">
                   <pre className="leading-relaxed whitespace-pre">
                     {currentChapter.visualDiagram.diagramText}
                   </pre>
@@ -524,7 +524,7 @@ export const TheoryView: React.FC<TheoryViewProps> = ({
                         key={stIdx}
                         className="p-2.5 bg-slate-50 dark:bg-slate-900/90 rounded-xl border border-slate-100 dark:border-slate-800 text-xs font-mono text-slate-800 dark:text-slate-200 flex items-center gap-2"
                       >
-                        <span className="w-5 h-5 rounded-full bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 text-[10px] font-bold flex items-center justify-center shrink-0">
+                        <span className="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 text-[10px] font-bold flex items-center justify-center shrink-0">
                           {stIdx + 1}
                         </span>
                         <span>{step}</span>
@@ -541,12 +541,12 @@ export const TheoryView: React.FC<TheoryViewProps> = ({
             <div className="space-y-3 pt-2">
               <div className="flex items-center justify-between pb-2 border-b border-slate-100 dark:border-slate-800">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                  <Sparkles className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                   <span className="text-xs font-mono font-extrabold uppercase tracking-wider text-slate-900 dark:text-white">
                     4. INTERACTIVE VISUALIZATION LAB
                   </span>
                 </div>
-                <span className="text-[11px] font-mono text-indigo-600 dark:text-indigo-400 font-bold bg-indigo-50 dark:bg-indigo-950 px-2 py-0.5 rounded">
+                <span className="text-[11px] font-mono text-blue-600 dark:text-blue-400 font-bold bg-blue-50 dark:bg-blue-950 px-2 py-0.5 rounded">
                   Live Interactive Demo
                 </span>
               </div>
@@ -576,7 +576,7 @@ export const TheoryView: React.FC<TheoryViewProps> = ({
               <div className="space-y-3 pt-2">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 pb-2 border-b border-slate-100 dark:border-slate-800">
                   <div className="flex items-center gap-2">
-                    <Code className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                    <Code className="w-4 h-4 text-blue-600 dark:text-blue-400" />
                     <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-800 dark:text-slate-200">
                       Implementation Code
                     </span>
@@ -602,7 +602,7 @@ export const TheoryView: React.FC<TheoryViewProps> = ({
                           }}
                           className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
                             isActiveLang
-                              ? 'bg-white dark:bg-slate-900 text-indigo-600 dark:text-indigo-400 shadow-2xs'
+                              ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-2xs'
                               : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                           }`}
                         >
@@ -634,7 +634,7 @@ export const TheoryView: React.FC<TheoryViewProps> = ({
                     </button>
                   </div>
 
-                  <pre className="p-4 sm:p-5 overflow-x-auto text-xs sm:text-[13px] leading-relaxed text-indigo-200">
+                  <pre className="p-4 sm:p-5 overflow-x-auto text-xs sm:text-[13px] leading-relaxed text-blue-200">
                     <code>{getActiveCode(currentChapter, selectedLanguage)}</code>
                   </pre>
                 </div>
@@ -650,7 +650,7 @@ export const TheoryView: React.FC<TheoryViewProps> = ({
                 className={`w-full sm:w-auto px-5 py-3 rounded-2xl font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all cursor-pointer shadow-xs ${
                   isCurrentCompleted
                     ? 'bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800'
-                    : 'bg-indigo-600 hover:bg-indigo-700 text-white'
+                    : 'bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-500 hover:from-blue-800 hover:via-blue-700 hover:to-indigo-600 text-white shadow-md shadow-blue-600/25'
                 }`}
               >
                 <CheckCircle2 className="w-4 h-4" />
@@ -672,7 +672,7 @@ export const TheoryView: React.FC<TheoryViewProps> = ({
                 <button
                   onClick={handleNextChapter}
                   disabled={activeChapterIndex === THEORY_LESSONS.length - 1}
-                  className="px-4 py-2.5 rounded-xl bg-indigo-50 dark:bg-indigo-950/80 border border-indigo-200/80 dark:border-indigo-800 font-bold text-xs text-indigo-700 dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900 disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1.5 transition-colors cursor-pointer"
+                  className="px-4 py-2.5 rounded-xl bg-blue-50 dark:bg-blue-950/80 border border-blue-200/80 dark:border-blue-800 font-bold text-xs text-blue-700 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900 disabled:opacity-30 disabled:cursor-not-allowed flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
                   <span>Next Chapter</span>
                   <ArrowRight className="w-3.5 h-3.5" />

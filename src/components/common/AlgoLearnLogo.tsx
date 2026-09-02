@@ -26,36 +26,37 @@ export const AlgoLearnIcon: React.FC<{ className?: string; size?: number | strin
       <defs>
         {/* Top diamond gradient - deep navy to royal blue */}
         <linearGradient id="capTopGrad" x1="12" y1="10" x2="88" y2="46" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#0a183d" />
-          <stop offset="35%" stopColor="#0f2b6b" />
-          <stop offset="70%" stopColor="#1e40af" />
+          <stop offset="0%" stopColor="#172554" />
+          <stop offset="40%" stopColor="#1e40af" />
+          <stop offset="75%" stopColor="#1d4ed8" />
           <stop offset="100%" stopColor="#2563eb" />
         </linearGradient>
 
-        {/* Lower base gradient - rich electric blue to bright cyan-blue */}
+        {/* Lower base gradient - royal blue with subtle violet shift on right */}
         <linearGradient id="capBaseGrad" x1="18" y1="36" x2="74" y2="72" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stopColor="#1e40af" />
-          <stop offset="25%" stopColor="#2563eb" />
-          <stop offset="75%" stopColor="#0284c7" />
-          <stop offset="100%" stopColor="#00d2ff" />
+          <stop offset="35%" stopColor="#2563eb" />
+          <stop offset="75%" stopColor="#3b82f6" />
+          <stop offset="100%" stopColor="#6366f1" />
         </linearGradient>
 
         {/* Cap rim/depth gradient */}
         <linearGradient id="capRimGrad" x1="8" y1="30" x2="88" y2="40" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#081433" />
-          <stop offset="50%" stopColor="#0d2459" />
+          <stop offset="0%" stopColor="#0f172a" />
+          <stop offset="50%" stopColor="#172554" />
           <stop offset="100%" stopColor="#1d4ed8" />
         </linearGradient>
 
         {/* Tassel gradient */}
         <linearGradient id="tasselGrad" x1="72" y1="28" x2="82" y2="62" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stopColor="#1d4ed8" />
-          <stop offset="100%" stopColor="#0284c7" />
+          <stop offset="60%" stopColor="#2563eb" />
+          <stop offset="100%" stopColor="#6366f1" />
         </linearGradient>
 
         {/* Soft shadow filter */}
         <filter id="capShadow" x="0" y="0" width="100" height="90" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
-          <feDropShadow dx="0" dy="3" stdDeviation="3" floodColor="#0284c7" floodOpacity="0.25" />
+          <feDropShadow dx="0" dy="3" stdDeviation="3" floodColor="#2563eb" floodOpacity="0.25" />
         </filter>
       </defs>
 
@@ -161,7 +162,7 @@ export const AlgoLearnLogo: React.FC<LogoProps> = ({
         <div className={`font-black tracking-tight leading-none ${currentSize.text} flex items-baseline`}>
           <span className="text-slate-900 dark:text-white font-extrabold">Algo</span>
           <span className="text-blue-600 dark:text-blue-500 font-black">L</span>
-          <span className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-400 dark:via-indigo-400 dark:to-purple-400 bg-clip-text text-transparent font-black">
+          <span className="bg-gradient-to-r from-blue-600 via-blue-600 to-indigo-500 dark:from-blue-400 dark:via-blue-400 dark:to-indigo-400 bg-clip-text text-transparent font-black">
             earn
           </span>
         </div>

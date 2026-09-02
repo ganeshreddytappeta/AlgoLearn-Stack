@@ -67,7 +67,7 @@ export const DebugAnalysisZone: React.FC<DebugAnalysisZoneProps> = ({
       <div className="lg:col-span-6 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs space-y-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400">
+            <span className="p-1.5 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400">
               <Bug className="w-4 h-4" />
             </span>
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-200">
@@ -101,7 +101,7 @@ export const DebugAnalysisZone: React.FC<DebugAnalysisZoneProps> = ({
                     ? 'bg-emerald-50 dark:bg-emerald-950/60 border-emerald-500 text-emerald-900 dark:text-emerald-200 font-bold'
                     : isFaultyTarget
                     ? 'bg-amber-50 dark:bg-amber-950/60 border-amber-500 text-amber-950 dark:text-amber-200 ring-4 ring-amber-200 dark:ring-amber-900 animate-pulse font-bold'
-                    : 'bg-slate-50 dark:bg-slate-800/80 hover:bg-indigo-50 dark:hover:bg-indigo-950/50 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:border-indigo-400'
+                    : 'bg-slate-50 dark:bg-slate-800/80 hover:bg-blue-50 dark:hover:bg-blue-950/50 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:border-blue-400'
                 }`}
               >
                 <span>{step.text}</span>
@@ -126,8 +126,8 @@ export const DebugAnalysisZone: React.FC<DebugAnalysisZoneProps> = ({
               : wrongStepAttempted
               ? 'border-red-500 bg-red-50/80 dark:bg-red-950/70 text-red-900 dark:text-red-200'
               : isDragOver || isGuidedSolveActive
-              ? 'border-indigo-500 bg-indigo-50/80 dark:bg-indigo-950/70 text-indigo-900 dark:text-indigo-200 ring-4 ring-indigo-200 dark:ring-indigo-900'
-              : 'border-slate-300 dark:border-slate-700 bg-white/60 dark:bg-slate-900/60 hover:border-indigo-400'
+              ? 'border-blue-500 bg-blue-50/80 dark:bg-blue-950/70 text-blue-900 dark:text-blue-200 ring-4 ring-blue-200 dark:ring-blue-900'
+              : 'border-slate-300 dark:border-slate-700 bg-white/60 dark:bg-slate-900/60 hover:border-blue-400'
           }`}
         >
           {identifiedStep ? (
@@ -170,7 +170,7 @@ export const DebugAnalysisZone: React.FC<DebugAnalysisZoneProps> = ({
             </motion.div>
           ) : (
             <div className="space-y-2.5">
-              <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950 text-indigo-600 dark:text-indigo-400 flex items-center justify-center mx-auto shadow-2xs border border-indigo-200 dark:border-indigo-800">
+              <div className="w-12 h-12 rounded-2xl bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center mx-auto shadow-2xs border border-blue-200 dark:border-blue-800">
                 <ShieldAlert className="w-6 h-6" />
               </div>
               <span className="text-xs font-extrabold uppercase tracking-wider text-slate-800 dark:text-slate-200 block">

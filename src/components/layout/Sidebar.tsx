@@ -11,7 +11,6 @@ import {
 } from 'lucide-react';
 import { TabType, UserProgress } from '../../types';
 import { soundEffects } from '../../services/sound';
-import { AlgoLearnLogo } from '../common/AlgoLearnLogo';
 
 interface SidebarProps {
   currentTab: TabType;
@@ -61,8 +60,8 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(({
       icon: LayoutGrid,
       badge: {
         text: `${completedActivities}/${totalActivities}`,
-        bg: 'bg-indigo-50 dark:bg-indigo-950/70',
-        color: 'text-indigo-600 dark:text-indigo-400',
+        bg: 'bg-blue-50 dark:bg-blue-950/70',
+        color: 'text-blue-600 dark:text-blue-400',
       },
     },
     {
@@ -71,8 +70,8 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(({
       icon: BookOpen,
       badge: {
         text: `${completedLearn}/12`,
-        bg: 'bg-indigo-50 dark:bg-indigo-950/70',
-        color: 'text-indigo-600 dark:text-indigo-400',
+        bg: 'bg-blue-50 dark:bg-blue-950/70',
+        color: 'text-blue-600 dark:text-blue-400',
       },
     },
     {
@@ -81,8 +80,8 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(({
       icon: Sparkles,
       badge: {
         text: `${completedLabs}/2`,
-        bg: 'bg-indigo-50 dark:bg-indigo-950/70',
-        color: 'text-indigo-600 dark:text-indigo-400',
+        bg: 'bg-blue-50 dark:bg-blue-950/70',
+        color: 'text-blue-600 dark:text-blue-400',
       },
     },
     {
@@ -100,9 +99,9 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(({
       label: 'Quiz',
       icon: HelpCircle,
       badge: {
-        text: progress.quizCompleted ? '1/1 Done' : '0/1 (10 Qs)',
-        bg: 'bg-indigo-50 dark:bg-indigo-950/70',
-        color: 'text-indigo-600 dark:text-indigo-400',
+        text: progress.quizCompleted ? '1/1' : '0/1',
+        bg: 'bg-blue-50 dark:bg-blue-950/70',
+        color: 'text-blue-600 dark:text-blue-400',
       },
     },
     {
@@ -111,8 +110,8 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(({
       icon: TrendingUp,
       badge: {
         text: `${masteryPercentage}%`,
-        bg: 'bg-indigo-50 dark:bg-indigo-950/70',
-        color: 'text-indigo-600 dark:text-indigo-400',
+        bg: 'bg-blue-50 dark:bg-blue-950/70',
+        color: 'text-blue-600 dark:text-blue-400',
       },
     },
   ];
@@ -136,40 +135,28 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(({
       }`}
     >
       <div className="w-[280px] sm:w-[300px] h-full flex flex-col justify-between shrink-0">
-        {/* Drawer Header */}
-        <div className="flex items-center justify-between px-4 py-4 border-b border-slate-200/80 dark:border-slate-800/80 shrink-0">
-          <AlgoLearnLogo size="sm" showSubtitle={true} />
-
-          {/* Close button (upper-right) */}
-          <button
-            onClick={() => {
-              soundEffects.playClick();
-              onClose();
-            }}
-            title="Close navigation (Esc)"
-            aria-label="Close navigation"
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* Navigation Items */}
-        <div className="p-3.5 flex-1 flex flex-col overflow-y-auto custom-scrollbar">
-          <div className="flex items-center justify-between px-2 py-1.5">
+        {/* Navigation Items (Directly at top without empty logo banner) */}
+        <div className="p-3 sm:p-3.5 flex-1 flex flex-col overflow-y-auto custom-scrollbar">
+          <div className="flex items-center justify-between px-2 py-1 mb-1.5 shrink-0 border-b border-slate-100 dark:border-slate-800/60 pb-2">
             <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
               Navigation Menu
             </span>
-            <span
-              className={`text-[10px] font-mono font-semibold text-indigo-600 dark:text-indigo-400 transition-all duration-300 ${
-                isHovered ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-1'
-              }`}
+
+            {/* Close button (upper-right) */}
+            <button
+              onClick={() => {
+                soundEffects.playClick();
+                onClose();
+              }}
+              title="Close navigation (Esc)"
+              aria-label="Close navigation"
+              className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
             >
-              {completedActivities}/{totalActivities} Done
-            </span>
+              <X className="w-4 h-4" />
+            </button>
           </div>
 
-          <nav className="space-y-1.5 flex-1 mt-1">
+          <nav className="space-y-1.5 flex-1 mt-0.5">
             {navItems.map((item) => {
               const isActive = currentTab === item.id;
               const Icon = item.icon;
@@ -181,8 +168,8 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(({
                   onClick={() => handleItemClick(item.id)}
                   className={`group w-full flex items-center justify-between px-3 py-2.5 rounded-2xl text-sm transition-all cursor-pointer ${
                     isActive
-                      ? 'bg-indigo-50/90 dark:bg-indigo-950/70 text-indigo-700 dark:text-indigo-300 font-bold border border-indigo-100/80 dark:border-indigo-900/50 shadow-2xs'
-                      : 'text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800/80 font-medium'
+                      ? 'bg-blue-50/90 dark:bg-blue-950/70 text-blue-700 dark:text-blue-300 font-bold border border-blue-100/80 dark:border-blue-900/50 shadow-2xs'
+                      : 'text-slate-600 dark:text-slate-300 hover:bg-blue-50/50 dark:hover:bg-slate-800/80 font-medium'
                   }`}
                 >
                   <div className="flex items-center gap-3.5 min-w-0">
@@ -190,7 +177,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(({
                     <div
                       className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all ${
                         isActive
-                          ? 'bg-indigo-600 text-white shadow-xs'
+                          ? 'bg-blue-600 text-white shadow-xs'
                           : 'bg-slate-50 dark:bg-slate-800/90 text-slate-500 dark:text-slate-400 border border-slate-100 dark:border-slate-700/60'
                       }`}
                     >
@@ -226,11 +213,11 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(({
         >
           <div className="flex items-center justify-between text-xs mb-1.5">
             <span className="font-semibold text-slate-700 dark:text-slate-300">Stack Curriculum</span>
-            <span className="font-mono font-bold text-indigo-600 dark:text-indigo-400">{masteryPercentage}%</span>
+            <span className="font-mono font-bold text-blue-600 dark:text-blue-400">{masteryPercentage}%</span>
           </div>
           <div className="w-full h-1.5 bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden mb-1.5">
             <div
-              className="h-full bg-gradient-to-r from-indigo-500 to-emerald-500 rounded-full transition-all duration-300"
+              className="h-full bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-500 rounded-full transition-all duration-300"
               style={{ width: `${masteryPercentage}%` }}
             />
           </div>

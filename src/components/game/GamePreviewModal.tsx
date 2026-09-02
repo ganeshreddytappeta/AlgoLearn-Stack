@@ -13,6 +13,7 @@ import {
   ChevronDown,
   ChevronUp,
   ShieldCheck,
+  Lightbulb,
 } from 'lucide-react';
 import { GameMetaData } from '../../data/gameMeta';
 import { MiniStackPreview } from './MiniStackPreview';
@@ -26,6 +27,7 @@ interface GamePreviewModalProps {
   currentChallengeProgress?: { current: number; total: number };
   onClose: () => void;
   onStartGame: (gameId: number) => void;
+  onOpenGuidedSolve?: (gameId: number) => void;
 }
 
 export const GamePreviewModal: React.FC<GamePreviewModalProps> = ({
@@ -36,10 +38,23 @@ export const GamePreviewModal: React.FC<GamePreviewModalProps> = ({
   currentChallengeProgress,
   onClose,
   onStartGame,
+  onOpenGuidedSolve,
 }) => {
   const [showHowToPlay, setShowHowToPlay] = useState<boolean>(false);
 
   if (!isOpen || !game) return null;
+
+  const handleStart = () => {
+    soundEffects.playClick();
+    onStartGame(game.id);
+  };
+
+  const handleGuidedSolve = () => {
+    soundEffects.playClick();
+    if (onOpenGuidedSolve) {
+      onOpenGuidedSolve(game.id);
+    }
+  };
 
   const difficultyColor =
     game.difficulty === 'Beginner'
@@ -47,11 +62,6 @@ export const GamePreviewModal: React.FC<GamePreviewModalProps> = ({
       : game.difficulty === 'Intermediate'
       ? 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/70 dark:text-blue-300 dark:border-blue-800'
       : 'bg-purple-50 text-purple-700 border-purple-200 dark:bg-purple-950/70 dark:text-purple-300 dark:border-purple-800';
-
-  const handleStart = () => {
-    soundEffects.playClick();
-    onStartGame(game.id);
-  };
 
   return (
     <div
@@ -66,7 +76,7 @@ export const GamePreviewModal: React.FC<GamePreviewModalProps> = ({
         <div className="flex items-start justify-between gap-3 pb-3 border-b border-slate-100 dark:border-slate-800">
           <div className="space-y-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-[11px] font-extrabold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 bg-indigo-50 dark:bg-indigo-950/80 px-2.5 py-0.5 rounded-full border border-indigo-200 dark:border-indigo-800">
+              <span className="text-[11px] font-extrabold uppercase tracking-wider text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/80 px-2.5 py-0.5 rounded-full border border-blue-200 dark:border-blue-800">
                 Level 0{game.levelNumber}
               </span>
               <span className={`text-[11px] font-bold px-2.5 py-0.5 rounded-full border ${difficultyColor}`}>
@@ -105,7 +115,7 @@ export const GamePreviewModal: React.FC<GamePreviewModalProps> = ({
           <div className="flex flex-col items-center justify-center p-1">
             <span className="text-[10px] font-bold uppercase text-slate-400 dark:text-slate-500">Duration</span>
             <div className="flex items-center gap-1 text-xs font-bold text-slate-800 dark:text-slate-200 mt-0.5">
-              <Clock className="w-3.5 h-3.5 text-indigo-500" />
+              <Clock className="w-3.5 h-3.5 text-blue-500" />
               <span>{game.duration}</span>
             </div>
           </div>
@@ -146,7 +156,7 @@ export const GamePreviewModal: React.FC<GamePreviewModalProps> = ({
             {game.skills.map((skill, idx) => (
               <span
                 key={idx}
-                className="px-2.5 py-1 rounded-lg bg-indigo-50/70 dark:bg-indigo-950/50 border border-indigo-200/70 dark:border-indigo-800/60 text-indigo-700 dark:text-indigo-300 text-xs font-medium"
+                className="px-2.5 py-1 rounded-lg bg-blue-50/70 dark:bg-blue-950/50 border border-blue-200/70 dark:border-blue-800/60 text-blue-700 dark:text-blue-300 text-xs font-medium"
               >
                 {skill}
               </span>
@@ -167,7 +177,7 @@ export const GamePreviewModal: React.FC<GamePreviewModalProps> = ({
             className="w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-800/80 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors flex items-center justify-between text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer"
           >
             <div className="flex items-center gap-2">
-              <HelpCircle className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+              <HelpCircle className="w-4 h-4 text-blue-600 dark:text-blue-400" />
               <span>HOW TO PLAY ({game.shortTitle})</span>
             </div>
             {showHowToPlay ? (
@@ -181,7 +191,7 @@ export const GamePreviewModal: React.FC<GamePreviewModalProps> = ({
             <div className="p-4 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 space-y-2.5 text-xs text-slate-600 dark:text-slate-300 animate-in fade-in duration-150">
               {game.howToPlay.map((step) => (
                 <div key={step.stepNumber} className="flex items-start gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
+                  <span className="w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-700 dark:text-blue-300 font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
                     {step.stepNumber}
                   </span>
                   <div>
@@ -199,21 +209,31 @@ export const GamePreviewModal: React.FC<GamePreviewModalProps> = ({
         </div>
 
         {/* Action Controls */}
-        <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
+        <div className="flex flex-col sm:flex-row items-center gap-2.5 pt-2">
           <button
             onClick={() => {
               soundEffects.playClick();
               setShowHowToPlay((prev) => !prev);
             }}
-            className="w-full sm:w-auto px-4 py-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+            className="w-full sm:w-auto px-3.5 py-3 rounded-xl border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-bold transition-colors cursor-pointer flex items-center justify-center gap-1.5"
           >
             <HelpCircle className="w-4 h-4 text-slate-400" />
             <span>{showHowToPlay ? 'Hide Rules' : 'How to Play'}</span>
           </button>
 
+          {onOpenGuidedSolve && (
+            <button
+              onClick={handleGuidedSolve}
+              className="w-full sm:w-auto px-4 py-3 rounded-xl border border-amber-300 dark:border-amber-700/80 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/60 dark:hover:bg-amber-900/60 text-amber-900 dark:text-amber-200 text-xs font-extrabold uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs active:scale-[0.99]"
+            >
+              <Lightbulb className="w-4 h-4 text-amber-500 fill-amber-500" />
+              <span>GUIDED SOLVE</span>
+            </button>
+          )}
+
           <button
             onClick={handleStart}
-            className="w-full sm:flex-1 py-3 px-6 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm transition-all shadow-md hover:shadow-indigo-500/20 active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer"
+            className="w-full sm:flex-1 py-3 px-5 rounded-xl bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-600 hover:from-blue-800 hover:to-indigo-700 text-white font-bold text-xs sm:text-sm transition-all shadow-md hover:shadow-blue-500/20 active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer"
           >
             <Gamepad2 className="w-4 h-4 text-amber-300" />
             <span>{isCompleted ? 'PLAY AGAIN' : isInProgress ? 'CONTINUE CHALLENGE' : 'START GAME'}</span>

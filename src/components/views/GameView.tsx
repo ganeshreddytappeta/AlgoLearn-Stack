@@ -20,6 +20,7 @@ import { DebugAnalysisZone } from '../game/DebugAnalysisZone';
 import { SpeedStackWorkspace } from '../game/SpeedStackWorkspace';
 import { TargetStackDisplay } from '../game/TargetStackDisplay';
 import { InGameLab } from '../game/InGameLab';
+import { GuidedSolveModal } from '../game/GuidedSolveModal';
 
 interface GameViewProps {
   progress: UserProgress;
@@ -37,6 +38,8 @@ export const GameView: React.FC<GameViewProps> = ({
   // Navigation & View Mode: 'hub' (Game Hub), 'playing' (Active Gameplay), or 'lab' (In-Game Experiment Lab)
   const [viewMode, setViewMode] = useState<'hub' | 'playing' | 'lab'>('hub');
   const [selectedGameForPreview, setSelectedGameForPreview] = useState<GameMetaData | null>(null);
+  const [isGuidedSolveOpen, setIsGuidedSolveOpen] = useState<boolean>(false);
+  const [guidedSolveLevelId, setGuidedSolveLevelId] = useState<number>(activeLevelId);
 
   // Current active level configuration
   const currentLevel: GameLevelConfig =
@@ -536,10 +539,28 @@ export const GameView: React.FC<GameViewProps> = ({
     }
   };
 
+  const handleOpenGuidedSolve = (levelId?: number) => {
+    soundEffects.playClick();
+    setGuidedSolveLevelId(levelId || activeLevelId);
+    setIsGuidedSolveOpen(true);
+  };
+
   // If in Hub view mode, render the Game Hub and Game Preview modal
   if (viewMode === 'hub') {
     return (
       <div className="w-full">
+        {/* Interactive Guided Solve Modal */}
+        <GuidedSolveModal
+          isOpen={isGuidedSolveOpen}
+          levelId={guidedSolveLevelId}
+          onClose={() => setIsGuidedSolveOpen(false)}
+          onTryLevel={(lvlId) => {
+            setIsGuidedSolveOpen(false);
+            handleSelectLevel(lvlId);
+            setViewMode('playing');
+          }}
+        />
+
         <GameHub
           progress={progress}
           activeLevelId={activeLevelId}
@@ -550,6 +571,9 @@ export const GameView: React.FC<GameViewProps> = ({
           onDirectContinue={(levelId) => {
             handleSelectLevel(levelId);
             setViewMode('playing');
+          }}
+          onOpenGuidedSolve={(levelId) => {
+            handleOpenGuidedSolve(levelId);
           }}
           onOpenInGameLab={() => {
             soundEffects.playClick();
@@ -574,6 +598,10 @@ export const GameView: React.FC<GameViewProps> = ({
             setSelectedGameForPreview(null);
             handleSelectLevel(gameId);
             setViewMode('playing');
+          }}
+          onOpenGuidedSolve={(gameId) => {
+            setSelectedGameForPreview(null);
+            handleOpenGuidedSolve(gameId);
           }}
         />
       </div>
@@ -601,6 +629,17 @@ export const GameView: React.FC<GameViewProps> = ({
 
   return (
     <div className="space-y-4 max-w-4xl mx-auto animate-in fade-in duration-200">
+      {/* Interactive Guided Solve Modal */}
+      <GuidedSolveModal
+        isOpen={isGuidedSolveOpen}
+        levelId={guidedSolveLevelId}
+        onClose={() => setIsGuidedSolveOpen(false)}
+        onTryLevel={(lvlId) => {
+          setIsGuidedSolveOpen(false);
+          handleSelectLevel(lvlId);
+        }}
+      />
+
       {/* Level Completed Celebration Modal */}
       <LevelCompleteModal
         isOpen={levelCompletedModalOpen}
@@ -611,12 +650,11 @@ export const GameView: React.FC<GameViewProps> = ({
         onNextLevel={() => {
           setLevelCompletedModalOpen(false);
           const nextLvlId = activeLevelId + 1;
-          const nextMeta = GAME_CATALOG.find((g) => g.id === nextLvlId);
-          if (nextMeta) {
-            setSelectedGameForPreview(nextMeta);
-            setViewMode('hub');
-          } else {
+          if (nextLvlId <= GAME_LEVELS.length) {
             handleSelectLevel(nextLvlId);
+            setViewMode('playing');
+          } else {
+            setViewMode('hub');
           }
         }}
         onReplayLevel={() => {
@@ -647,6 +685,7 @@ export const GameView: React.FC<GameViewProps> = ({
           soundEffects.playClick();
           setViewMode('lab');
         }}
+        onOpenGuidedSolve={() => handleOpenGuidedSolve(activeLevelId)}
         onSelectLevel={handleSelectLevel}
         onResetChallenge={handleResetChallenge}
         onResetGame={handleResetGame}
@@ -658,7 +697,10 @@ export const GameView: React.FC<GameViewProps> = ({
 
       {/* 2. Focused Question Card */}
       {currentChallenge && (
-        <QuestionCard challenge={currentChallenge} />
+        <QuestionCard
+          challenge={currentChallenge}
+          onOpenGuidedSolve={() => handleOpenGuidedSolve(activeLevelId)}
+        />
       )}
 
       {/* 3. Game Feedback Card (Shows upon correct/incorrect move) */}

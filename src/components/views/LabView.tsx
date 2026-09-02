@@ -174,8 +174,8 @@ export const LabView: React.FC<LabViewProps> = ({
           onClick={() => handleLessonWatch(1)}
           className={`bg-white dark:bg-slate-900 rounded-3xl border p-6 sm:p-8 shadow-xs flex flex-col justify-between transition-all duration-200 cursor-pointer ${
             selectedLessonId === 1
-              ? 'border-indigo-500 dark:border-indigo-500 ring-2 ring-indigo-500/25 shadow-lg shadow-indigo-500/10'
-              : 'border-slate-200/90 dark:border-slate-800 hover:border-indigo-300 dark:hover:border-slate-700'
+              ? 'border-blue-500 dark:border-blue-500 ring-2 ring-blue-500/25 shadow-lg shadow-blue-500/10'
+              : 'border-slate-200/90 dark:border-slate-800 hover:border-blue-300 dark:hover:border-slate-700'
           }`}
         >
           <div className="space-y-4">
@@ -185,7 +185,7 @@ export const LabView: React.FC<LabViewProps> = ({
                 <span className="text-[11px] font-mono font-bold px-3 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 uppercase tracking-wider border border-slate-200/80 dark:border-slate-700/80">
                   LESSON 01
                 </span>
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 border border-indigo-200/70 dark:border-indigo-900/60">
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 border border-blue-200/70 dark:border-blue-900/60">
                   Stack Data Structure.mp4
                 </span>
               </div>
@@ -196,7 +196,7 @@ export const LabView: React.FC<LabViewProps> = ({
                     <CheckCircle2 className="w-4 h-4 stroke-[2.5]" />
                   </span>
                 )}
-                <div className="w-9 h-9 rounded-full bg-indigo-50 dark:bg-indigo-950/70 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-100 dark:border-indigo-900/50 shadow-2xs">
+                <div className="w-9 h-9 rounded-full bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-blue-400 flex items-center justify-center border border-blue-100 dark:border-blue-900/50 shadow-2xs">
                   <Film className="w-4 h-4 stroke-[2.2]" />
                 </div>
               </div>
@@ -238,8 +238,8 @@ export const LabView: React.FC<LabViewProps> = ({
               }}
               className={`w-full py-3.5 px-4 rounded-2xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-[0.99] ${
                 selectedLessonId === 1
-                  ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-500/25 ring-2 ring-indigo-400/30'
-                  : 'bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-200/60 dark:border-indigo-800/60'
+                  ? 'bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-500 hover:from-blue-800 hover:via-blue-700 hover:to-indigo-600 text-white shadow-md shadow-blue-500/25 ring-2 ring-blue-400/30'
+                  : 'bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/60 border border-blue-200/60 dark:border-blue-800/60'
               }`}
             >
               <Play className="w-4 h-4 fill-current ml-0.5" />
@@ -253,8 +253,8 @@ export const LabView: React.FC<LabViewProps> = ({
           onClick={() => handleLessonWatch(2)}
           className={`bg-white dark:bg-slate-900 rounded-3xl border p-6 sm:p-8 shadow-xs flex flex-col justify-between transition-all duration-200 cursor-pointer ${
             selectedLessonId === 2
-              ? 'border-indigo-500 dark:border-indigo-500 ring-2 ring-indigo-500/25 shadow-lg shadow-indigo-500/10'
-              : 'border-slate-200/90 dark:border-slate-800 hover:border-indigo-300 dark:hover:border-slate-700'
+              ? 'border-blue-500 dark:border-blue-500 ring-2 ring-blue-500/25 shadow-lg shadow-blue-500/10'
+              : 'border-slate-200/90 dark:border-slate-800 hover:border-blue-300 dark:hover:border-slate-700'
           }`}
         >
           <div className="space-y-4">
@@ -264,7 +264,7 @@ export const LabView: React.FC<LabViewProps> = ({
                 <span className="text-[11px] font-mono font-bold px-3 py-1 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 uppercase tracking-wider border border-slate-200/80 dark:border-slate-700/80">
                   LESSON 02
                 </span>
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 border border-indigo-200/70 dark:border-indigo-900/60">
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-md bg-blue-50 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 border border-blue-200/70 dark:border-blue-900/60">
                   Stack Operations.mp4
                 </span>
               </div>
@@ -275,7 +275,7 @@ export const LabView: React.FC<LabViewProps> = ({
                     <CheckCircle2 className="w-4 h-4 stroke-[2.5]" />
                   </span>
                 )}
-                <div className="w-9 h-9 rounded-full bg-indigo-50 dark:bg-indigo-950/70 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-100 dark:border-indigo-900/50 shadow-2xs">
+                <div className="w-9 h-9 rounded-full bg-blue-50 dark:bg-blue-950/70 text-blue-600 dark:text-blue-400 flex items-center justify-center border border-blue-100 dark:border-blue-900/50 shadow-2xs">
                   <Film className="w-4 h-4 stroke-[2.2]" />
                 </div>
               </div>
@@ -323,8 +323,8 @@ export const LabView: React.FC<LabViewProps> = ({
               }}
               className={`w-full py-3.5 px-4 rounded-2xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-xs active:scale-[0.99] ${
                 selectedLessonId === 2
-                  ? 'bg-indigo-600 hover:bg-indigo-500 text-white shadow-indigo-500/25 ring-2 ring-indigo-400/30'
-                  : 'bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 border border-indigo-200/60 dark:border-indigo-800/60'
+                  ? 'bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-500 hover:from-blue-800 hover:via-blue-700 hover:to-indigo-600 text-white shadow-md shadow-blue-500/25 ring-2 ring-blue-400/30'
+                  : 'bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/60 border border-blue-200/60 dark:border-blue-800/60'
               }`}
             >
               <Play className="w-4 h-4 fill-current ml-0.5" />

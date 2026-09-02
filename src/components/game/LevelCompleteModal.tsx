@@ -95,18 +95,18 @@ export const LevelCompleteModal: React.FC<LevelCompleteModalProps> = ({
             {hasNextLevel ? (
               <button
                 onClick={onNextLevel}
-                className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-black transition-colors shadow-xs flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-3.5 bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-600 hover:from-blue-800 hover:to-indigo-700 text-white rounded-xl text-xs sm:text-sm font-black uppercase tracking-wide transition-all shadow-md shadow-blue-500/20 flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
               >
-                <span>Proceed to Next Level</span>
+                <span>NEXT LEVEL</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
             ) : (
               <button
                 onClick={onClose}
-                className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black transition-colors shadow-xs flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-3.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white rounded-xl text-xs sm:text-sm font-black uppercase tracking-wide transition-all shadow-md shadow-emerald-500/20 flex items-center justify-center gap-2 cursor-pointer active:scale-[0.99]"
               >
                 <CheckCircle2 className="w-4 h-4" />
-                <span>Finish Game Course</span>
+                <span>FINISH ALL CHALLENGES</span>
               </button>
             )}
 
@@ -122,7 +122,7 @@ export const LevelCompleteModal: React.FC<LevelCompleteModalProps> = ({
                 onClick={onClose}
                 className="px-4 py-2.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 rounded-xl text-xs font-semibold transition-colors cursor-pointer"
               >
-                Close
+                Back to Levels
               </button>
             </div>
           </div>

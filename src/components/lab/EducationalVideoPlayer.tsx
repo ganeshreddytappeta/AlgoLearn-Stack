@@ -272,17 +272,10 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
   const exitFullscreen = useCallback(() => {
     setIsFullscreen(false);
     setFsControlsVisible(true);
-    if (document.fullscreenElement) {
+    if (typeof document !== 'undefined' && document.fullscreenElement) {
       document.exitFullscreen().catch(() => {});
     }
   }, []);
-
-  // Ensure when playing starts, it automatically plays in fullscreen
-  useEffect(() => {
-    if (isPlaying && !isFullscreen) {
-      enterFullscreen();
-    }
-  }, [isPlaying, isFullscreen, enterFullscreen]);
 
   // Handle external autoPlay trigger (e.g. from WATCH LESSON buttons)
   useEffect(() => {
@@ -313,7 +306,6 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
           .play()
           .then(() => {
             setIsPlaying(true);
-            enterFullscreen();
           })
           .catch(() => {
             setIsPlaying(false);
@@ -396,8 +388,29 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
     }
   };
 
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = parseFloat(e.target.value);
+    setVolume(val);
+    if (val > 0) setIsMuted(false);
+    if (nativeVideoRef.current) {
+      nativeVideoRef.current.volume = val;
+      nativeVideoRef.current.muted = false;
+    }
+  };
+
+  const handleToggleMute = useCallback(() => {
+    soundEffects.playClick();
+    setIsMuted((prev) => {
+      const nextMuted = !prev;
+      if (nativeVideoRef.current) {
+        nativeVideoRef.current.muted = nextMuted;
+      }
+      return nextMuted;
+    });
+  }, []);
+
   // Fullscreen toggle
-  const toggleFullscreen = () => {
+  const toggleFullscreen = useCallback(() => {
     soundEffects.playClick();
     if (!containerRef.current) return;
     if (!document.fullscreenElement && !isFullscreen) {
@@ -405,7 +418,7 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
     } else {
       exitFullscreen();
     }
-  };
+  }, [enterFullscreen, exitFullscreen, isFullscreen]);
 
   useEffect(() => {
     const handleFsChange = () => {
@@ -439,16 +452,19 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
         handleSkipTime(5);
       } else if (e.key.toLowerCase() === 'm') {
         e.preventDefault();
-        setIsMuted((prev) => !prev);
+        handleToggleMute();
       } else if (e.key.toLowerCase() === 'f') {
         e.preventDefault();
         toggleFullscreen();
+      } else if (e.key === 'Escape' && isFullscreen) {
+        e.preventDefault();
+        exitFullscreen();
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isPlaying, isVideoMode, totalDuration, currentTime]);
+  }, [isPlaying, isVideoMode, totalDuration, currentTime, isFullscreen, exitFullscreen, toggleFullscreen, handleToggleMute]);
 
   const formatTime = (secs: number) => {
     if (isNaN(secs) || !isFinite(secs) || secs < 0) return '00:00';
@@ -525,25 +541,6 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
     }
   };
 
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const val = parseFloat(e.target.value);
-    setVolume(val);
-    if (val > 0) setIsMuted(false);
-    if (nativeVideoRef.current) {
-      nativeVideoRef.current.volume = val;
-      nativeVideoRef.current.muted = false;
-    }
-  };
-
-  const handleToggleMute = () => {
-    soundEffects.playClick();
-    const nextMuted = !isMuted;
-    setIsMuted(nextMuted);
-    if (nativeVideoRef.current) {
-      nativeVideoRef.current.muted = nextMuted;
-    }
-  };
-
   // Video screen click handler:
   // - In fullscreen: clicking the video screen area while playing toggles control visibility
   //   without pausing or restarting playback, and without exiting fullscreen.
@@ -612,7 +609,7 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
       {!isFullscreen && (
         <div className="flex items-center justify-between gap-3 pb-4 mb-4 border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-indigo-50 dark:bg-indigo-950/80 text-indigo-600 dark:text-indigo-400 flex items-center justify-center border border-indigo-200/70 dark:border-indigo-800/70 shadow-2xs shrink-0">
+            <div className="w-10 h-10 rounded-2xl bg-blue-50 dark:bg-blue-950/80 text-blue-600 dark:text-blue-400 flex items-center justify-center border border-blue-200/70 dark:border-blue-800/70 shadow-2xs shrink-0">
               <Video className="w-5 h-5 stroke-[2.2]" />
             </div>
             <div>
@@ -672,7 +669,7 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
                 }}
                 className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px] transition-opacity cursor-pointer z-10"
               >
-                <div className="w-18 h-18 sm:w-20 sm:h-20 rounded-full bg-indigo-600/90 hover:bg-indigo-500 text-white flex items-center justify-center shadow-[0_0_30px_rgba(99,102,241,0.7)] transform transition-transform group-hover:scale-110 active:scale-95">
+                <div className="w-18 h-18 sm:w-20 sm:h-20 rounded-full bg-blue-600/90 hover:bg-blue-500 text-white flex items-center justify-center shadow-[0_0_30px_rgba(37,99,235,0.7)] transform transition-transform group-hover:scale-110 active:scale-95">
                   <Play className="w-8 h-8 sm:w-9 sm:h-9 fill-current ml-1" />
                 </div>
               </div>
@@ -694,7 +691,7 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
                 <span className="px-3 py-1.5 rounded-xl bg-black/80 backdrop-blur-md text-white text-xs font-mono font-bold border border-white/15 shadow-md">
                   {activeLesson.title}
                 </span>
-                <span className="px-3 py-1.5 rounded-xl bg-black/80 backdrop-blur-md text-indigo-300 text-xs font-mono font-bold border border-white/15 shadow-md">
+                <span className="px-3 py-1.5 rounded-xl bg-black/80 backdrop-blur-md text-blue-300 text-xs font-mono font-bold border border-white/15 shadow-md">
                   {formatTime(currentTime)} / {formatTime(totalDuration)}
                 </span>
               </div>
@@ -725,7 +722,7 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
             <div
               className="absolute inset-0 opacity-[0.07] pointer-events-none"
               style={{
-                backgroundImage: `radial-gradient(circle, #6366f1 1px, transparent 1px)`,
+                backgroundImage: `radial-gradient(circle, #2563eb 1px, transparent 1px)`,
                 backgroundSize: '24px 24px',
               }}
             />
@@ -741,7 +738,7 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
               }`}
             >
               <div className="flex items-center gap-2">
-                <span className="px-2.5 py-0.5 rounded-md bg-indigo-600/30 text-indigo-300 border border-indigo-500/40 text-[10px] font-mono font-bold uppercase tracking-wider">
+                <span className="px-2.5 py-0.5 rounded-md bg-blue-600/30 text-blue-300 border border-blue-500/40 text-[10px] font-mono font-bold uppercase tracking-wider">
                   SCENE {activeScene?.id || 1}/{activeLesson.scenes.length}
                 </span>
                 <span
@@ -992,15 +989,15 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
             >
               {/* Accent Fill */}
               <div
-                className="h-full bg-indigo-600 dark:bg-indigo-500 rounded-full transition-[width] duration-75"
+                className="h-full bg-blue-600 dark:bg-blue-500 rounded-full transition-[width] duration-75"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
 
             {/* Circular Draggable Scrubber Thumb */}
             <div
-              className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-full border-2 border-indigo-600 dark:border-indigo-400 bg-white shadow-md transition-transform duration-75 pointer-events-none ${
-                isDragging ? 'scale-125 ring-4 ring-indigo-500/30' : 'group-hover:scale-110'
+              className={`absolute top-1/2 -translate-y-1/2 w-4 h-4 sm:w-4.5 sm:h-4.5 rounded-full border-2 border-blue-600 dark:border-blue-400 bg-white shadow-md transition-transform duration-75 pointer-events-none ${
+                isDragging ? 'scale-125 ring-4 ring-blue-500/30' : 'group-hover:scale-110'
               }`}
               style={{ left: `calc(${progressPercent}% - 8px)` }}
             />
@@ -1046,7 +1043,7 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
             {/* Central Play/Pause Button */}
             <button
               onClick={handleTogglePlay}
-              className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-md shadow-indigo-600/30 transition-all active:scale-95 cursor-pointer tracking-wide"
+              className="px-5 sm:px-6 py-2.5 sm:py-3 rounded-2xl bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-500 hover:from-blue-800 hover:via-blue-700 hover:to-indigo-600 text-white font-bold text-xs sm:text-sm flex items-center gap-2 shadow-md shadow-blue-600/30 transition-all active:scale-95 cursor-pointer tracking-wide"
               aria-label={isPlaying ? 'Pause video' : 'Play video'}
             >
               {isPlaying ? (
@@ -1091,7 +1088,7 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
                 onClick={() => handleSpeedChange(spd)}
                 className={`px-2.5 sm:px-3.5 py-1.5 rounded-xl font-bold transition-all cursor-pointer ${
                   playbackSpeed === spd
-                    ? 'bg-indigo-600 text-white shadow-2xs'
+                    ? 'bg-blue-600 text-white shadow-2xs'
                     : isFullscreen
                     ? 'text-slate-300 hover:text-white'
                     : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
@@ -1115,7 +1112,7 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
             >
               <button
                 onClick={handleToggleMute}
-                className="hover:text-indigo-500 transition-colors cursor-pointer"
+                className="hover:text-blue-500 transition-colors cursor-pointer"
                 title={isMuted ? 'Unmute (M)' : 'Mute (M)'}
                 aria-label={isMuted ? 'Unmute' : 'Mute'}
               >
@@ -1133,7 +1130,7 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
                 value={isMuted ? 0 : volume}
                 onChange={handleVolumeChange}
                 aria-label="Volume Slider"
-                className="w-16 sm:w-20 h-1.5 rounded-full accent-indigo-600 dark:accent-indigo-500 cursor-pointer"
+                className="w-16 sm:w-20 h-1.5 rounded-full accent-blue-600 dark:accent-blue-500 cursor-pointer"
               />
             </div>
 

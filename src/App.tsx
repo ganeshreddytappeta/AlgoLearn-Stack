@@ -123,7 +123,7 @@ export default function App() {
   };
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 flex antialiased selection:bg-indigo-500 selection:text-white transition-colors duration-200 relative">
+    <div className="h-screen w-screen overflow-hidden bg-slate-50 dark:bg-[#0b1120] text-slate-900 dark:text-slate-100 flex antialiased selection:bg-blue-600 selection:text-white transition-colors duration-200 relative">
       {/* Navigation Bar */}
       <Sidebar
         ref={sidebarRef}

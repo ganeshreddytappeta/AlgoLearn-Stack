@@ -55,9 +55,9 @@ export const SpeedStackWorkspace: React.FC<SpeedStackWorkspaceProps> = ({
         </div>
 
         <div className="flex items-center gap-2">
-          <Trophy className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+          <Trophy className="w-5 h-5 text-blue-600 dark:text-blue-400" />
           <span className="text-xs font-bold text-slate-500 uppercase">Score:</span>
-          <span className="text-xl font-mono font-black text-indigo-600 dark:text-indigo-400">
+          <span className="text-xl font-mono font-black text-blue-600 dark:text-blue-400">
             {score}
           </span>
         </div>
@@ -74,7 +74,7 @@ export const SpeedStackWorkspace: React.FC<SpeedStackWorkspaceProps> = ({
 
       {/* Target Action Banner */}
       {isRunning && (
-        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white text-center shadow-md animate-pulse">
+        <div className="p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-600 text-white text-center shadow-md animate-pulse">
           <div className="flex items-center justify-center gap-2 mb-1">
             <Flame className="w-4 h-4 text-amber-300 fill-amber-300" />
             <span className="text-[10px] uppercase font-black tracking-widest bg-white/20 px-2 py-0.5 rounded">

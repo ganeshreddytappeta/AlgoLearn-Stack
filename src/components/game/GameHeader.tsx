@@ -1,5 +1,5 @@
 import React from 'react';
-import { Gamepad2, Sparkles, RotateCcw, RefreshCw, LayoutGrid, ArrowLeft } from 'lucide-react';
+import { Gamepad2, Sparkles, RotateCcw, RefreshCw, LayoutGrid, ArrowLeft, Lightbulb } from 'lucide-react';
 import { GameLevelConfig, UserProgress } from '../../types';
 
 interface GameHeaderProps {
@@ -12,6 +12,7 @@ interface GameHeaderProps {
   maxMistakes?: number;
   isLabActive?: boolean;
   onOpenLab?: () => void;
+  onOpenGuidedSolve?: () => void;
   onSelectLevel: (levelId: number) => void;
   onResetChallenge: () => void;
   onResetGame?: () => void;
@@ -28,6 +29,7 @@ export const GameHeader: React.FC<GameHeaderProps> = ({
   maxMistakes = 3,
   isLabActive = false,
   onOpenLab,
+  onOpenGuidedSolve,
   onSelectLevel,
   onResetChallenge,
   onResetGame,
@@ -50,7 +52,7 @@ export const GameHeader: React.FC<GameHeaderProps> = ({
             </button>
           )}
 
-          <div className="w-8 h-8 rounded-xl bg-indigo-600 dark:bg-indigo-500 text-white flex items-center justify-center shrink-0 shadow-xs">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-r from-blue-700 via-blue-600 to-indigo-600 text-white flex items-center justify-center shrink-0 shadow-xs">
             <Gamepad2 className="w-4 h-4" />
           </div>
 
@@ -79,6 +81,18 @@ export const GameHeader: React.FC<GameHeaderProps> = ({
             </select>
           </div>
 
+          {/* Guided Solve Button in Header */}
+          {onOpenGuidedSolve && !isLabActive && (
+            <button
+              onClick={onOpenGuidedSolve}
+              title="Open Step-by-Step Guided Solve"
+              className="px-3 py-1.5 rounded-xl font-bold text-xs border border-amber-300 dark:border-amber-700/80 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/60 dark:hover:bg-amber-900/60 text-amber-900 dark:text-amber-200 transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs"
+            >
+              <Lightbulb className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
+              <span>Guided Solve</span>
+            </button>
+          )}
+
           {/* In-Game Lab Fast Toggle Button */}
           {onOpenLab && (
             <button
@@ -86,8 +100,8 @@ export const GameHeader: React.FC<GameHeaderProps> = ({
               title="Open In-Game Experiment Lab"
               className={`px-3 py-1.5 rounded-xl font-bold text-xs border transition-all flex items-center gap-1.5 cursor-pointer shadow-2xs ${
                 isLabActive
-                  ? 'bg-violet-600 text-white border-violet-500 shadow-violet-500/20'
-                  : 'bg-violet-50 hover:bg-violet-100 dark:bg-violet-950/60 dark:hover:bg-violet-900/60 text-violet-700 dark:text-violet-300 border-violet-200 dark:border-violet-800'
+                  ? 'bg-blue-600 text-white border-blue-500 shadow-blue-500/20'
+                  : 'bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/60 dark:hover:bg-blue-900/60 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800'
               }`}
             >
               <span>🧪 Lab Mode</span>
