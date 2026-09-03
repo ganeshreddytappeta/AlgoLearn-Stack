@@ -178,13 +178,6 @@ export interface GameChallenge {
     ruleDescription: string;
     example: string;
   };
-  guidedSolve: {
-    stepExplanation: string;
-    sourceValue?: number;
-    sourceType?: 'top' | 'available' | 'debug-step';
-    targetZone: 'pop-zone' | 'push-zone' | 'debug-zone';
-    visualPathText: string;
-  };
   feedback: {
     correctTitle: string;
     correctActionText: string;
@@ -192,49 +185,6 @@ export interface GameChallenge {
     incorrectTip: string;
   };
   xpReward: number;
-}
-
-export interface GuidedSolveStep {
-  stepNumber: number;
-  totalSteps?: number;
-  title: string;
-  subtitle?: string;
-  conceptBadge?: string;
-  stackState: {
-    items: (number | string)[];
-    capacity: number;
-    topIndex?: number;
-    highlightTop?: boolean;
-    highlightItem?: number | string;
-    warningState?: 'overflow' | 'underflow' | null;
-  };
-  explanation: string;
-  questionPrompt?: string;
-  interactionType:
-    | 'info-next'
-    | 'click-push'
-    | 'select-choice'
-    | 'click-pop'
-    | 'click-peek'
-    | 'click-display'
-    | 'yes-no'
-    | 'underflow-action'
-    | 'overflow-action';
-  pushValue?: number | string;
-  choices?: { id: string; label: string; isCorrect: boolean; feedback: string }[];
-  correctChoiceId?: string;
-  displayOutput?: (number | string)[];
-  hints: string[];
-  correctFeedback: {
-    title: string;
-    explanation: string;
-    actionResult?: string;
-  };
-  incorrectFeedback?: {
-    title: string;
-    explanation: string;
-  };
-  postActionStack?: (number | string)[];
 }
 
 export interface GameLevelConfig {
@@ -262,7 +212,6 @@ export interface GameLevelConfig {
   xpReward: number;
   stars: number;
   hints: [string, string, string]; // 1: Concept, 2: Direction, 3: Strong
-  guidedSteps?: GuidedSolveStep[];
   challenges: GameChallenge[];
 }
 

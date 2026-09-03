@@ -27,7 +27,7 @@ interface GamePreviewModalProps {
   currentChallengeProgress?: { current: number; total: number };
   onClose: () => void;
   onStartGame: (gameId: number) => void;
-  onOpenGuidedSolve?: (gameId: number) => void;
+  onStartGuidedSolve?: (gameId: number) => void;
 }
 
 export const GamePreviewModal: React.FC<GamePreviewModalProps> = ({
@@ -38,7 +38,7 @@ export const GamePreviewModal: React.FC<GamePreviewModalProps> = ({
   currentChallengeProgress,
   onClose,
   onStartGame,
-  onOpenGuidedSolve,
+  onStartGuidedSolve,
 }) => {
   const [showHowToPlay, setShowHowToPlay] = useState<boolean>(false);
 
@@ -47,13 +47,6 @@ export const GamePreviewModal: React.FC<GamePreviewModalProps> = ({
   const handleStart = () => {
     soundEffects.playClick();
     onStartGame(game.id);
-  };
-
-  const handleGuidedSolve = () => {
-    soundEffects.playClick();
-    if (onOpenGuidedSolve) {
-      onOpenGuidedSolve(game.id);
-    }
   };
 
   const difficultyColor =
@@ -221,12 +214,15 @@ export const GamePreviewModal: React.FC<GamePreviewModalProps> = ({
             <span>{showHowToPlay ? 'Hide Rules' : 'How to Play'}</span>
           </button>
 
-          {onOpenGuidedSolve && (
+          {onStartGuidedSolve && (
             <button
-              onClick={handleGuidedSolve}
-              className="w-full sm:w-auto px-4 py-3 rounded-xl border border-amber-300 dark:border-amber-700/80 bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/60 dark:hover:bg-amber-900/60 text-amber-900 dark:text-amber-200 text-xs font-extrabold uppercase transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-xs active:scale-[0.99]"
+              onClick={() => {
+                soundEffects.playClick();
+                onStartGuidedSolve(game.id);
+              }}
+              className="w-full sm:w-auto px-4 py-3 rounded-xl bg-amber-50 hover:bg-amber-100 dark:bg-amber-950/70 dark:hover:bg-amber-900/70 text-amber-800 dark:text-amber-200 border border-amber-300 dark:border-amber-700 text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs"
             >
-              <Lightbulb className="w-4 h-4 text-amber-500 fill-amber-500" />
+              <Lightbulb className="w-4 h-4 fill-amber-500 text-amber-600 dark:text-amber-400" />
               <span>GUIDED SOLVE</span>
             </button>
           )}

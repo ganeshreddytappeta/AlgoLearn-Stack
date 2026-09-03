@@ -6,7 +6,6 @@ interface PopZoneProps {
   topElementValue: number | string | null;
   onPopSuccess: (value: number | string) => void;
   onPopInvalid: (attemptedValue: number | string) => void;
-  isGuidedSolveActive?: boolean;
   disabled?: boolean;
 }
 
@@ -14,7 +13,6 @@ export const PopZone: React.FC<PopZoneProps> = ({
   topElementValue,
   onPopSuccess,
   onPopInvalid,
-  isGuidedSolveActive = false,
   disabled = false,
 }) => {
   const [dragState, setDragState] = useState<'idle' | 'valid' | 'invalid'>('idle');
@@ -89,8 +87,6 @@ export const PopZone: React.FC<PopZoneProps> = ({
             ? 'border-emerald-500 bg-emerald-50/90 dark:bg-emerald-950/80 ring-4 ring-emerald-200 dark:ring-emerald-900 scale-102'
             : dragState === 'invalid'
             ? 'border-red-500 bg-red-50/90 dark:bg-red-950/80 ring-4 ring-red-200 dark:ring-red-900'
-            : isGuidedSolveActive
-            ? 'border-blue-500 bg-blue-50/60 dark:bg-blue-950/60 ring-4 ring-blue-200 dark:ring-blue-900 animate-pulse'
             : 'border-slate-300 dark:border-slate-700 bg-slate-50/60 dark:bg-slate-900/50 hover:border-blue-400 dark:hover:border-blue-500'
         }`}
       >

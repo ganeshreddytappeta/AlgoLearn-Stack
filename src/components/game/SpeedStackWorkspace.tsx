@@ -17,6 +17,9 @@ interface SpeedStackWorkspaceProps {
   onStartSpeed: () => void;
   onPushValue: (val: number) => void;
   onPopTop: () => void;
+  disabled?: boolean;
+  peekValue?: number | string | null;
+  isGuidedSolveActive?: boolean;
 }
 
 export const SpeedStackWorkspace: React.FC<SpeedStackWorkspaceProps> = ({
@@ -33,6 +36,9 @@ export const SpeedStackWorkspace: React.FC<SpeedStackWorkspaceProps> = ({
   onStartSpeed,
   onPushValue,
   onPopTop,
+  disabled = false,
+  peekValue = null,
+  isGuidedSolveActive = false,
 }) => {
   return (
     <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-5 sm:p-6 shadow-xs space-y-5">
@@ -88,7 +94,7 @@ export const SpeedStackWorkspace: React.FC<SpeedStackWorkspaceProps> = ({
       )}
 
       {/* Interactive Controls & Stack Visualizer Grid */}
-      {isRunning ? (
+      {isRunning || isGuidedSolveActive ? (
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Controls Column (6 cols) */}
           <div className="lg:col-span-6 space-y-4">
@@ -101,8 +107,9 @@ export const SpeedStackWorkspace: React.FC<SpeedStackWorkspaceProps> = ({
                 {availableElements.map((val) => (
                   <button
                     key={val}
+                    disabled={disabled || isGuidedSolveActive}
                     onClick={() => onPushValue(val)}
-                    className="h-12 bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/60 border-2 border-slate-200 dark:border-slate-700 hover:border-blue-500 rounded-xl font-mono font-bold text-xs text-slate-900 dark:text-white transition-all cursor-pointer shadow-2xs hover:scale-105 active:scale-95"
+                    className="h-12 bg-white dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-blue-950/60 border-2 border-slate-200 dark:border-slate-700 hover:border-blue-500 disabled:opacity-50 disabled:pointer-events-none rounded-xl font-mono font-bold text-xs text-slate-900 dark:text-white transition-all cursor-pointer shadow-2xs hover:scale-105 active:scale-95"
                   >
                     {val}
                   </button>
@@ -112,8 +119,9 @@ export const SpeedStackWorkspace: React.FC<SpeedStackWorkspaceProps> = ({
 
             {/* Quick Pop Button */}
             <button
+              disabled={disabled || isGuidedSolveActive}
               onClick={onPopTop}
-              className="w-full py-4 bg-red-50 hover:bg-red-100 dark:bg-red-950/50 dark:hover:bg-red-900/60 border-2 border-red-200 dark:border-red-800 rounded-2xl text-red-700 dark:text-red-300 font-black text-sm flex items-center justify-center gap-2 cursor-pointer transition-all shadow-2xs active:scale-98"
+              className="w-full py-4 bg-red-50 hover:bg-red-100 dark:bg-red-950/50 dark:hover:bg-red-900/60 border-2 border-red-200 dark:border-red-800 disabled:opacity-50 disabled:pointer-events-none rounded-2xl text-red-700 dark:text-red-300 font-black text-sm flex items-center justify-center gap-2 cursor-pointer transition-all shadow-2xs active:scale-98"
             >
               <Trash2 className="w-5 h-5" />
               <span>POP TOP ELEMENT</span>
@@ -125,6 +133,7 @@ export const SpeedStackWorkspace: React.FC<SpeedStackWorkspaceProps> = ({
             <StackVisualizer
               items={stack}
               capacity={6}
+              peekValue={peekValue}
               allowDragPop={false}
               customEmptyMessage="Speed stack empty. Follow active trial prompt."
             />

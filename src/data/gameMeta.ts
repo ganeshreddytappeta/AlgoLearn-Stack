@@ -45,7 +45,7 @@ export const GAME_CATALOG: GameMetaData[] = [
     xpReward: 50,
     skills: ['LIFO Principle', 'TOP Pointer', 'POP Operation', 'Stack Underflow Safety'],
     interactionType: 'Drag-and-drop to POP Zone',
-    hintAvailability: '3-stage guided hints available',
+    hintAvailability: '3-stage progressive hints available',
     iconName: 'pop',
     howToPlay: [
       {
@@ -90,7 +90,7 @@ export const GAME_CATALOG: GameMetaData[] = [
     xpReward: 50,
     skills: ['PUSH Operation', 'Top Pointer Shifting', 'Stack Capacity Limits', 'Stack Overflow Safety'],
     interactionType: 'Palette selection & Push drop',
-    hintAvailability: '3-stage guided hints available',
+    hintAvailability: '3-stage progressive hints available',
     iconName: 'push',
     howToPlay: [
       {
@@ -135,7 +135,7 @@ export const GAME_CATALOG: GameMetaData[] = [
     xpReward: 75,
     skills: ['Bottom-Up Assembly', 'Target Matching', 'Sequence Inversion', 'Algorithmic Order'],
     interactionType: 'Sequential element ordering',
-    hintAvailability: '3-stage guided hints available',
+    hintAvailability: '3-stage progressive hints available',
     iconName: 'build',
     howToPlay: [
       {
@@ -180,7 +180,7 @@ export const GAME_CATALOG: GameMetaData[] = [
     xpReward: 75,
     skills: ['Code Tracing', 'Mental Simulation', 'Transient Element Tracking', 'State Reconstruction'],
     interactionType: 'Code trace analysis & build',
-    hintAvailability: '3-stage guided hints available',
+    hintAvailability: '3-stage progressive hints available',
     iconName: 'predict',
     howToPlay: [
       {
@@ -230,7 +230,7 @@ export const GAME_CATALOG: GameMetaData[] = [
     xpReward: 100,
     skills: ['Stack Underflow', 'Stack Overflow', 'Single-Ended Invariant', 'Defensive Programming'],
     interactionType: 'Interactive line selection & diagnosis',
-    hintAvailability: '3-stage guided hints available',
+    hintAvailability: '3-stage progressive hints available',
     iconName: 'debug',
     howToPlay: [
       {
@@ -276,7 +276,7 @@ export const GAME_CATALOG: GameMetaData[] = [
     xpReward: 100,
     skills: ['Rapid LIFO Reflexes', 'High-Speed Push/Pop', 'Streak Multipliers', 'Zero-Latency Decisions'],
     interactionType: 'Rapid-fire timed action prompts',
-    hintAvailability: '3-stage guided hints available',
+    hintAvailability: '3-stage progressive hints available',
     iconName: 'speed',
     howToPlay: [
       {

@@ -243,7 +243,7 @@ export const LabView: React.FC<LabViewProps> = ({
               }`}
             >
               <Play className="w-4 h-4 fill-current ml-0.5" />
-              <span>▶ WATCH LESSON 01 VIDEO</span>
+              <span>WATCH LESSON 01 VIDEO</span>
             </button>
           </div>
         </div>
@@ -328,7 +328,7 @@ export const LabView: React.FC<LabViewProps> = ({
               }`}
             >
               <Play className="w-4 h-4 fill-current ml-0.5" />
-              <span>▶ WATCH LESSON 02 VIDEO</span>
+              <span>WATCH LESSON 02 VIDEO</span>
             </button>
           </div>
         </div>

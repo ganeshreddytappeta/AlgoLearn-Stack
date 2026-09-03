@@ -43,9 +43,9 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(({
   // Compute stats according to curriculum
   const completedLearn = Math.min(12, progress.completedTheoryChapters?.length || 0);
   const completedLabs = Math.min(2, progress.completedLabs?.length || 0);
-  const completedGames = Math.min(5, progress.completedGameLevels?.length || 0);
-  const totalActivities = 20;
-  const completedActivities = Math.min(20, completedLearn + completedLabs + completedGames + (progress.quizCompleted ? 1 : 0));
+  const completedGames = Math.min(6, progress.completedGameLevels?.length || 0);
+  const totalActivities = 21;
+  const completedActivities = Math.min(21, completedLearn + completedLabs + completedGames + (progress.quizCompleted ? 1 : 0));
   const masteryPercentage = Math.round((completedActivities / totalActivities) * 100);
 
   const navItems: {
@@ -84,7 +84,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(({
       label: 'Game',
       icon: Gamepad2,
       badge: {
-        text: `${completedGames}/5`,
+        text: `${completedGames}/6`,
         bg: 'bg-emerald-50 dark:bg-emerald-950/60',
         color: 'text-emerald-600 dark:text-emerald-400',
       },
@@ -94,7 +94,7 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(({
       label: 'Quiz',
       icon: HelpCircle,
       badge: {
-        text: progress.quizCompleted ? '1/1' : '0/1',
+        text: progress.quizCompleted ? '10/10' : `${Math.min(10, progress.quizTotalQuestionsAnswered || 0)}/10`,
         bg: 'bg-blue-50 dark:bg-blue-950/70',
         color: 'text-blue-600 dark:text-blue-400',
       },

@@ -5,7 +5,6 @@ import {
   Award,
   CheckCircle2,
   XCircle,
-  Lightbulb,
   RotateCcw,
   ArrowRight,
   ArrowLeft,
@@ -21,7 +20,6 @@ import {
 } from 'lucide-react';
 import { QuizQuestion, UserProgress } from '../../types';
 import { QUIZ_QUESTIONS } from '../../data/quizData';
-import { HintModal } from '../common/HintModal';
 import { soundEffects } from '../../services/sound';
 import { awardXP } from '../../services/storage';
 
@@ -46,7 +44,6 @@ export const QuizView: React.FC<QuizViewProps> = ({
   const [currentIdx, setCurrentIdx] = useState<number>(0);
   const [answers, setAnswers] = useState<Record<number, QuestionAnswerState>>({});
   const [quizFinished, setQuizFinished] = useState<boolean>(false);
-  const [isHintOpen, setIsHintOpen] = useState<boolean>(false);
   const [reviewQuestionIdx, setReviewQuestionIdx] = useState<number | null>(null);
 
   const currentQ: QuizQuestion = QUIZ_QUESTIONS[currentIdx];
@@ -236,13 +233,6 @@ export const QuizView: React.FC<QuizViewProps> = ({
 
   return (
     <div className="space-y-6 pb-12 max-w-4xl mx-auto">
-      {/* 3-Stage Hint Modal */}
-      <HintModal
-        isOpen={isHintOpen}
-        onClose={() => setIsHintOpen(false)}
-        hints={currentQ.hints}
-      />
-
       {/* Header */}
       <div className="bg-white dark:bg-slate-900 p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-2xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -265,16 +255,6 @@ export const QuizView: React.FC<QuizViewProps> = ({
             <span className="text-xs font-bold text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 font-mono">
               Question {currentIdx + 1} of {QUIZ_QUESTIONS.length}
             </span>
-            <button
-              onClick={() => {
-                soundEffects.playClick();
-                setIsHintOpen(true);
-              }}
-              className="px-3.5 py-1.5 bg-amber-50 dark:bg-amber-950/50 hover:bg-amber-100 dark:hover:bg-amber-900/50 border border-amber-200 dark:border-amber-800 text-amber-900 dark:text-amber-300 font-bold text-xs rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer shadow-2xs"
-            >
-              <Lightbulb className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-              <span>Hint</span>
-            </button>
           </div>
         )}
       </div>

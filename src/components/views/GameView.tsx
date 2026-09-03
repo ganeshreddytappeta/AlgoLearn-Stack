@@ -20,8 +20,8 @@ import { DebugAnalysisZone } from '../game/DebugAnalysisZone';
 import { SpeedStackWorkspace } from '../game/SpeedStackWorkspace';
 import { TargetStackDisplay } from '../game/TargetStackDisplay';
 import { InGameLab } from '../game/InGameLab';
-import { LiveGuidedSolverPanel } from '../game/LiveGuidedSolverPanel';
-import { generateLiveSolverSteps, LiveSolverStep } from '../../services/liveGuidedSolverEngine';
+import { GuidedSolvePanel } from '../game/GuidedSolvePanel';
+import { generateGuidedSteps, GuidedStep } from '../../services/guidedSolveEngine';
 
 interface GameViewProps {
   progress: UserProgress;
@@ -39,12 +39,6 @@ export const GameView: React.FC<GameViewProps> = ({
   // Navigation & View Mode: 'hub' (Game Hub), 'playing' (Active Gameplay), or 'lab' (In-Game Experiment Lab)
   const [viewMode, setViewMode] = useState<'hub' | 'playing' | 'lab'>('hub');
   const [selectedGameForPreview, setSelectedGameForPreview] = useState<GameMetaData | null>(null);
-
-  // Live In-Game Step-by-Step Guided Solve State
-  const [isLiveGuidedSolveActive, setIsLiveGuidedSolveActive] = useState<boolean>(false);
-  const [liveSolverSteps, setLiveSolverSteps] = useState<LiveSolverStep[]>([]);
-  const [liveSolverStepIndex, setLiveSolverStepIndex] = useState<number>(0);
-  const [isLiveGuidePaused, setIsLiveGuidePaused] = useState<boolean>(false);
 
   // Current active level configuration
   const currentLevel: GameLevelConfig =
@@ -81,118 +75,11 @@ export const GameView: React.FC<GameViewProps> = ({
   const [speedCombo, setSpeedCombo] = useState<number>(1);
   const [speedStep, setSpeedStep] = useState<number>(0);
 
-  // Applies a specific live solver step's stack & debug state to the real game state
-  const applyLiveStepState = useCallback((step: LiveSolverStep) => {
-    if (!step) return;
-
-    // Synchronize actual stack items
-    const newItems: StackItem[] = step.resultingStack.map((val, idx) => ({
-      id: `live-guided-${idx}-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
-      value: val,
-      addedAt: Date.now() + idx,
-    }));
-    setActiveStack(newItems);
-
-    // Synchronize available elements if specified
-    if (step.availableElementsAfter) {
-      setAvailableElements([...step.availableElementsAfter]);
-    }
-
-    // Synchronize debug step if in debug mode
-    if (step.operationType === 'DEBUG_LINE') {
-      if (step.isFaulty) {
-        setIdentifiedStep({
-          id: step.debugLineId,
-          text: step.debugLineText,
-          isFaulty: true,
-          explanation: step.actionDescription,
-        });
-        setWrongStepAttempted(null);
-      } else {
-        setIdentifiedStep(null);
-        setWrongStepAttempted(null);
-      }
-    }
-  }, []);
-
-  // Launch live guided solver for the current challenge
-  const handleStartLiveGuidedSolve = (levelId?: number) => {
-    soundEffects.playClick();
-    const targetLevelId = levelId || activeLevelId;
-    if (targetLevelId !== activeLevelId) {
-      handleSelectLevel(targetLevelId);
-    }
-    const targetLevel = GAME_LEVELS.find((l) => l.id === targetLevelId) || currentLevel;
-    const targetChallenge =
-      (targetLevelId === activeLevelId ? currentChallenge : targetLevel.challenges?.[0]) || currentChallenge;
-
-    const steps = generateLiveSolverSteps(targetChallenge, targetLevel);
-    setLiveSolverSteps(steps);
-    setLiveSolverStepIndex(0);
-    setIsLiveGuidePaused(false);
-    setIsLiveGuidedSolveActive(true);
-    setFeedbackStatus(null);
-
-    // Apply the first step's state immediately
-    if (steps.length > 0) {
-      applyLiveStepState(steps[0]);
-    }
-  };
-
-  // Advance to next live guided step
-  const handleLiveNextStep = () => {
-    if (liveSolverStepIndex < liveSolverSteps.length - 1) {
-      const nextIdx = liveSolverStepIndex + 1;
-      const nextStep = liveSolverSteps[nextIdx];
-
-      if (nextStep.operationType === 'PUSH') soundEffects.playPush();
-      else if (nextStep.operationType === 'POP') soundEffects.playPop();
-      else if (nextStep.operationType === 'FINAL') soundEffects.playSuccess();
-      else soundEffects.playClick();
-
-      setLiveSolverStepIndex(nextIdx);
-      applyLiveStepState(nextStep);
-    }
-  };
-
-  // Go back to previous live guided step
-  const handleLivePrevStep = () => {
-    if (liveSolverStepIndex > 0) {
-      const prevIdx = liveSolverStepIndex - 1;
-      const prevStep = liveSolverSteps[prevIdx];
-      soundEffects.playClick();
-      setLiveSolverStepIndex(prevIdx);
-      applyLiveStepState(prevStep);
-    }
-  };
-
-  // Exit live guided solver and restore challenge state
-  const handleLiveExitGuide = () => {
-    soundEffects.playClick();
-    setIsLiveGuidedSolveActive(false);
-    setLiveSolverSteps([]);
-    setLiveSolverStepIndex(0);
-    if (currentChallenge) {
-      setupChallenge(currentChallenge);
-    }
-  };
-
-  // Try it yourself: reset problem to initial state and return to normal play
-  const handleLiveTryItYourself = () => {
-    soundEffects.playClick();
-    setIsLiveGuidedSolveActive(false);
-    setLiveSolverSteps([]);
-    setLiveSolverStepIndex(0);
-    if (currentChallenge) {
-      setupChallenge(currentChallenge);
-    }
-  };
-
-  // Toggle pause on live guide
-  const handleToggleLivePause = () => {
-    soundEffects.playClick();
-    setIsLiveGuidePaused((p) => !p);
-  };
+  // Guided Solve Engine State
+  const [isGuidedSolveActive, setIsGuidedSolveActive] = useState<boolean>(false);
+  const [guidedSteps, setGuidedSteps] = useState<GuidedStep[]>([]);
+  const [guidedStepIndex, setGuidedStepIndex] = useState<number>(0);
+  const [guidedPeekValue, setGuidedPeekValue] = useState<number | string | null>(null);
 
   // Initialize or Reset Challenge State
   const setupChallenge = useCallback((challenge: GameChallenge) => {
@@ -213,6 +100,8 @@ export const GameView: React.FC<GameViewProps> = ({
     setFeedbackLifoReason('');
     setIdentifiedStep(null);
     setWrongStepAttempted(null);
+    setIsGuidedSolveActive(false);
+    setGuidedPeekValue(null);
   }, []);
 
   // When active level or challenge changes, re-initialize
@@ -320,6 +209,156 @@ export const GameView: React.FC<GameViewProps> = ({
       setCurrentChallengeIndex((prev) => prev + 1);
     } else {
       handleTriggerLevelComplete();
+    }
+  };
+
+  // =========================================================================
+  // GUIDED SOLVE ENGINE HANDLERS
+  // =========================================================================
+  const applyGuidedStep = useCallback((step: GuidedStep, challenge: GameChallenge) => {
+    if (!step) return;
+
+    // 1. Update REAL stack with unique items so animation runs cleanly
+    const newItems: StackItem[] = step.resultingStack.map((val, idx) => ({
+      id: `guided-${idx}-${Date.now()}-${val}`,
+      value: val,
+      addedAt: Date.now() + idx,
+    }));
+    setActiveStack(newItems);
+
+    // 2. Play matching sound effect
+    if (step.operation === 'PUSH') {
+      soundEffects.playPush();
+    } else if (step.operation === 'POP') {
+      soundEffects.playPop();
+    } else if (step.operation === 'PEEK') {
+      soundEffects.playClick();
+      setGuidedPeekValue(step.peekValue ?? null);
+    } else if (step.operation === 'OVERFLOW' || step.operation === 'UNDERFLOW') {
+      soundEffects.playError();
+    } else {
+      soundEffects.playClick();
+    }
+
+    if (step.operation !== 'PEEK') {
+      setGuidedPeekValue(null);
+    }
+
+    // 3. Synchronize with Level 5 debug analysis if step has a line ID
+    if (step.debugLineId && challenge.debugSteps) {
+      const dStep = challenge.debugSteps.find((s) => s.id === step.debugLineId);
+      if (dStep) {
+        if (step.isFaulty) {
+          setIdentifiedStep(dStep);
+          setWrongStepAttempted(null);
+        } else {
+          setIdentifiedStep(null);
+          setWrongStepAttempted(null);
+        }
+      }
+    }
+
+    // 4. Update available elements if challenge has them
+    if (challenge.availableElements) {
+      const usedCounts: Record<string, number> = {};
+      step.resultingStack.forEach((v) => {
+        usedCounts[String(v)] = (usedCounts[String(v)] || 0) + 1;
+      });
+      const remaining: number[] = [];
+      challenge.availableElements.forEach((el) => {
+        if (usedCounts[String(el)] && usedCounts[String(el)] > 0) {
+          usedCounts[String(el)]--;
+        } else {
+          remaining.push(el);
+        }
+      });
+      setAvailableElements(remaining);
+    }
+  }, []);
+
+  const handleStartGuidedSolve = useCallback(
+    (specificLevelId?: number) => {
+      soundEffects.playClick();
+
+      const targetLevel = specificLevelId
+        ? GAME_LEVELS.find((l) => l.id === specificLevelId) || currentLevel
+        : currentLevel;
+
+      if (specificLevelId && specificLevelId !== activeLevelId) {
+        onSelectLevel(specificLevelId);
+        setCurrentChallengeIndex(0);
+      }
+
+      const targetChallenge =
+        specificLevelId && specificLevelId !== activeLevelId
+          ? targetLevel.challenges?.[0] || currentChallenge
+          : currentChallenge;
+
+      if (!targetChallenge) return;
+
+      // Clean up stack state first
+      const initialItems: StackItem[] = targetChallenge.initialStack.map((val, idx) => ({
+        id: `${targetChallenge.id}-init-${idx}-${Date.now()}`,
+        value: val,
+        addedAt: Date.now() + idx,
+      }));
+      setActiveStack(initialItems);
+      setAvailableElements(targetChallenge.availableElements ? [...targetChallenge.availableElements] : []);
+
+      const steps = generateGuidedSteps(targetLevel, targetChallenge);
+      setGuidedSteps(steps);
+      setGuidedStepIndex(0);
+      setIsGuidedSolveActive(true);
+      setViewMode('playing');
+      setFeedbackStatus(null);
+
+      // Execute Step 0 automatically
+      if (steps.length > 0) {
+        applyGuidedStep(steps[0], targetChallenge);
+      }
+    },
+    [activeLevelId, currentChallenge, currentLevel, onSelectLevel, applyGuidedStep]
+  );
+
+  const handleGuidedNextStep = () => {
+    if (guidedStepIndex < guidedSteps.length - 1) {
+      const nextIdx = guidedStepIndex + 1;
+      setGuidedStepIndex(nextIdx);
+      applyGuidedStep(guidedSteps[nextIdx], currentChallenge);
+    }
+  };
+
+  const handleGuidedFinish = () => {
+    soundEffects.playSuccess();
+    setIsGuidedSolveActive(false);
+    setGuidedPeekValue(null);
+
+    const finalStep = guidedSteps[guidedSteps.length - 1];
+    const finalTop =
+      finalStep?.resultingTop !== null && finalStep?.resultingTop !== undefined
+        ? finalStep.resultingTop
+        : 'Empty';
+
+    // Set feedback confirmation
+    setFeedbackStatus('correct');
+    setFeedbackTitle(`Guided Solve Complete! Final TOP = ${finalTop}`);
+    setFeedbackActionText(
+      finalStep?.resultExplanation || 'All stack operations solved and verified successfully.'
+    );
+    setFeedbackLifoReason(
+      finalStep?.conceptNote || 'Demonstrated LIFO (Last In, First Out) stack mechanics.'
+    );
+
+    // Complete the current level and show the existing Level Complete modal with Next Level button
+    handleTriggerLevelComplete();
+  };
+
+  const handleGuidedExit = () => {
+    soundEffects.playClick();
+    setIsGuidedSolveActive(false);
+    setGuidedPeekValue(null);
+    if (currentChallenge) {
+      setupChallenge(currentChallenge);
     }
   };
 
@@ -657,10 +696,6 @@ export const GameView: React.FC<GameViewProps> = ({
     }
   };
 
-  const handleOpenGuidedSolve = (levelId?: number) => {
-    handleStartLiveGuidedSolve(levelId);
-  };
-
   // If in Hub view mode, render the Game Hub and Game Preview modal
   if (viewMode === 'hub') {
     return (
@@ -674,10 +709,6 @@ export const GameView: React.FC<GameViewProps> = ({
           }}
           onDirectContinue={(levelId) => {
             handleSelectLevel(levelId);
-            setViewMode('playing');
-          }}
-          onOpenGuidedSolve={(levelId) => {
-            handleStartLiveGuidedSolve(levelId);
             setViewMode('playing');
           }}
           onOpenInGameLab={() => {
@@ -704,10 +735,9 @@ export const GameView: React.FC<GameViewProps> = ({
             handleSelectLevel(gameId);
             setViewMode('playing');
           }}
-          onOpenGuidedSolve={(gameId) => {
+          onStartGuidedSolve={(gameId) => {
             setSelectedGameForPreview(null);
-            handleStartLiveGuidedSolve(gameId);
-            setViewMode('playing');
+            handleStartGuidedSolve(gameId);
           }}
         />
       </div>
@@ -780,57 +810,58 @@ export const GameView: React.FC<GameViewProps> = ({
           soundEffects.playClick();
           setViewMode('lab');
         }}
-        onOpenGuidedSolve={() => handleStartLiveGuidedSolve(activeLevelId)}
         onSelectLevel={(lvlId) => {
-          setIsLiveGuidedSolveActive(false);
           handleSelectLevel(lvlId);
         }}
         onResetChallenge={handleResetChallenge}
         onResetGame={handleResetGame}
         onBackToHub={() => {
           soundEffects.playClick();
-          setIsLiveGuidedSolveActive(false);
           setViewMode('hub');
         }}
+        onOpenGuidedSolve={() => handleStartGuidedSolve()}
+        isGuidedSolveActive={isGuidedSolveActive}
       />
 
-      {/* 2. Live Step-by-Step Guided Solve Panel (Embedded directly inside existing game layout) */}
-      {isLiveGuidedSolveActive && liveSolverSteps.length > 0 && (
-        <LiveGuidedSolverPanel
-          currentStep={liveSolverSteps[liveSolverStepIndex] || liveSolverSteps[0]}
-          currentStepIndex={liveSolverStepIndex}
-          totalSteps={liveSolverSteps.length}
-          isPaused={isLiveGuidePaused}
-          onTogglePause={handleToggleLivePause}
-          onNextStep={handleLiveNextStep}
-          onPrevStep={handleLivePrevStep}
-          onExitGuide={handleLiveExitGuide}
-          onTryItYourself={handleLiveTryItYourself}
+      {/* 2. Interactive Guided Solve Walkthrough Panel OR Focused Question Card */}
+      {isGuidedSolveActive && guidedSteps.length > 0 ? (
+        <GuidedSolvePanel
+          currentStep={guidedSteps[guidedStepIndex]}
+          allSteps={guidedSteps}
+          stepIndex={guidedStepIndex}
+          onNextStep={handleGuidedNextStep}
+          onFinish={handleGuidedFinish}
+          onExit={handleGuidedExit}
+          currentTopValue={currentTopValue}
+          stackSize={activeStack.length}
+          capacity={currentChallenge?.capacity || 5}
         />
+      ) : (
+        currentChallenge && (
+          <QuestionCard
+            challenge={currentChallenge}
+            onOpenGuidedSolve={() => handleStartGuidedSolve()}
+            isGuidedSolveActive={isGuidedSolveActive}
+          />
+        )
       )}
 
-      {/* 3. Focused Question Card */}
-      {currentChallenge && (
-        <QuestionCard
-          challenge={currentChallenge}
-          onOpenGuidedSolve={() => handleStartLiveGuidedSolve(activeLevelId)}
+      {/* 3. Game Feedback Card (Shows upon manual correct/incorrect move) */}
+      {!isGuidedSolveActive && (
+        <GameFeedbackCard
+          status={feedbackStatus}
+          title={feedbackTitle}
+          actionText={feedbackActionText}
+          lifoReason={feedbackLifoReason}
+          xpEarned={earnedXP}
+          onNextChallenge={handleNextChallenge}
+          onRetry={() => {
+            setFeedbackStatus(null);
+            if (currentChallenge) setupChallenge(currentChallenge);
+          }}
+          isLastChallenge={currentChallengeIndex === challenges.length - 1}
         />
       )}
-
-      {/* 3. Game Feedback Card (Shows upon correct/incorrect move) */}
-      <GameFeedbackCard
-        status={feedbackStatus}
-        title={feedbackTitle}
-        actionText={feedbackActionText}
-        lifoReason={feedbackLifoReason}
-        xpEarned={earnedXP}
-        onNextChallenge={handleNextChallenge}
-        onRetry={() => {
-          setFeedbackStatus(null);
-          if (currentChallenge) setupChallenge(currentChallenge);
-        }}
-        isLastChallenge={currentChallengeIndex === challenges.length - 1}
-      />
 
       {/* ========================================================================= */}
       {/* LEVEL 1: POP MASTER WORKSPACE */}
@@ -842,7 +873,7 @@ export const GameView: React.FC<GameViewProps> = ({
             topElementValue={currentTopValue}
             onPopSuccess={handlePopSuccess}
             onPopInvalid={handlePopInvalid}
-            disabled={feedbackStatus === 'correct'}
+            disabled={isGuidedSolveActive || feedbackStatus === 'correct'}
           />
 
           {/* Current Stack Visualizer */}
@@ -851,7 +882,8 @@ export const GameView: React.FC<GameViewProps> = ({
               items={activeStack}
               capacity={currentChallenge?.capacity || 6}
               onInvalidPopAttempt={handlePopInvalid}
-              allowDragPop={feedbackStatus !== 'correct'}
+              allowDragPop={!isGuidedSolveActive && feedbackStatus !== 'correct'}
+              peekValue={guidedPeekValue}
               customEmptyMessage="Stack is empty! All items popped."
             />
           </div>
@@ -876,15 +908,15 @@ export const GameView: React.FC<GameViewProps> = ({
             }}
             currentTopValue={currentTopValue}
             showPopAction={activeStack.length > (currentChallenge?.initialStack?.length || 0)}
-            guidedTargetValue={currentChallenge?.targetValue}
-            disabled={feedbackStatus === 'correct'}
+            disabled={isGuidedSolveActive || feedbackStatus === 'correct'}
           />
 
           <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-xs">
             <StackVisualizer
               items={activeStack}
               capacity={currentChallenge?.capacity || 5}
-              onDropItem={(val) => handlePushValue(Number(val))}
+              onDropItem={!isGuidedSolveActive ? (val) => handlePushValue(Number(val)) : undefined}
+              peekValue={guidedPeekValue}
               allowDragPop={false}
               customEmptyMessage="Stack is empty. Click or drop an element above."
             />
@@ -903,7 +935,7 @@ export const GameView: React.FC<GameViewProps> = ({
             onPopTop={() => handleBuildPop()}
             currentTopValue={currentTopValue}
             showPopAction={activeStack.length > 0}
-            disabled={feedbackStatus === 'correct'}
+            disabled={isGuidedSolveActive || feedbackStatus === 'correct'}
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
@@ -927,7 +959,7 @@ export const GameView: React.FC<GameViewProps> = ({
                   topElementValue={currentTopValue}
                   onPopSuccess={(val) => handleBuildPop(val)}
                   onPopInvalid={handlePopInvalid}
-                  disabled={feedbackStatus === 'correct' || activeStack.length === 0}
+                  disabled={isGuidedSolveActive || feedbackStatus === 'correct' || activeStack.length === 0}
                 />
               </div>
             </div>
@@ -936,9 +968,10 @@ export const GameView: React.FC<GameViewProps> = ({
               <StackVisualizer
                 items={activeStack}
                 capacity={currentChallenge?.capacity || 5}
-                onDropItem={(val) => handleBuildPushValue(Number(val))}
+                onDropItem={!isGuidedSolveActive ? (val) => handleBuildPushValue(Number(val)) : undefined}
                 onInvalidPopAttempt={handlePopInvalid}
-                allowDragPop={feedbackStatus !== 'correct'}
+                peekValue={guidedPeekValue}
+                allowDragPop={!isGuidedSolveActive && feedbackStatus !== 'correct'}
                 customEmptyMessage="Drop available elements above or click chips to build target stack."
               />
             </div>
@@ -957,7 +990,7 @@ export const GameView: React.FC<GameViewProps> = ({
             onPopTop={() => handleBuildPop()}
             currentTopValue={currentTopValue}
             showPopAction={activeStack.length > 0}
-            disabled={feedbackStatus === 'correct'}
+            disabled={isGuidedSolveActive || feedbackStatus === 'correct'}
           />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
@@ -982,7 +1015,7 @@ export const GameView: React.FC<GameViewProps> = ({
                   topElementValue={currentTopValue}
                   onPopSuccess={(val) => handleBuildPop(val)}
                   onPopInvalid={handlePopInvalid}
-                  disabled={feedbackStatus === 'correct' || activeStack.length === 0}
+                  disabled={isGuidedSolveActive || feedbackStatus === 'correct' || activeStack.length === 0}
                 />
               </div>
             </div>
@@ -991,9 +1024,10 @@ export const GameView: React.FC<GameViewProps> = ({
               <StackVisualizer
                 items={activeStack}
                 capacity={currentChallenge?.capacity || 5}
-                onDropItem={(val) => handleBuildPushValue(Number(val))}
+                onDropItem={!isGuidedSolveActive ? (val) => handleBuildPushValue(Number(val)) : undefined}
                 onInvalidPopAttempt={handlePopInvalid}
-                allowDragPop={feedbackStatus !== 'correct'}
+                peekValue={guidedPeekValue}
+                allowDragPop={!isGuidedSolveActive && feedbackStatus !== 'correct'}
                 customEmptyMessage="Push elements following trace or reconstruct the final stack state."
               />
             </div>
@@ -1011,6 +1045,7 @@ export const GameView: React.FC<GameViewProps> = ({
           onWrongStepSelected={handleDebugWrongStep}
           identifiedStep={identifiedStep}
           wrongStepAttempted={wrongStepAttempted}
+          disabled={isGuidedSolveActive}
         />
       )}
 
@@ -1029,6 +1064,9 @@ export const GameView: React.FC<GameViewProps> = ({
           activePromptAction={currentChallenge?.mode === 'pop' ? 'POP' : 'PUSH'}
           stack={activeStack}
           availableElements={currentChallenge?.availableElements || [10, 20, 30, 40, 50]}
+          disabled={isGuidedSolveActive}
+          isGuidedSolveActive={isGuidedSolveActive}
+          peekValue={guidedPeekValue}
           onStartSpeed={() => {
             soundEffects.playClick();
             setSpeedRunning(true);

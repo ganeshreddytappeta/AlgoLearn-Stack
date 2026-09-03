@@ -660,21 +660,6 @@ export const EducationalVideoPlayer: React.FC<EducationalVideoPlayerProps> = ({
               className="w-full h-full object-contain bg-black pointer-events-none"
             />
 
-            {/* Glowing Big Center Play Button overlay when paused */}
-            {!isPlaying && (
-              <div
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleTogglePlay();
-                }}
-                className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-[2px] transition-opacity cursor-pointer z-10"
-              >
-                <div className="w-18 h-18 sm:w-20 sm:h-20 rounded-full bg-blue-600/90 hover:bg-blue-500 text-white flex items-center justify-center shadow-[0_0_30px_rgba(37,99,235,0.7)] transform transition-transform group-hover:scale-110 active:scale-95">
-                  <Play className="w-8 h-8 sm:w-9 sm:h-9 fill-current ml-1" />
-                </div>
-              </div>
-            )}
-
             {/* Floating Top Mini HUD */}
             <div
               className={`absolute top-3 left-3 right-3 sm:top-5 sm:left-6 sm:right-6 flex items-center justify-between transition-opacity duration-200 z-30 ${

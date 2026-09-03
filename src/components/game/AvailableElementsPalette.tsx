@@ -7,8 +7,6 @@ interface AvailableElementsPaletteProps {
   onPopTop?: () => void;
   currentTopValue?: number | string | null;
   showPopAction?: boolean;
-  guidedTargetValue?: number;
-  isGuidedSolveActive?: boolean;
   disabled?: boolean;
   allowCustomInput?: boolean;
 }
@@ -19,8 +17,6 @@ export const AvailableElementsPalette: React.FC<AvailableElementsPaletteProps> =
   onPopTop,
   currentTopValue = null,
   showPopAction = false,
-  guidedTargetValue,
-  isGuidedSolveActive = false,
   disabled = false,
   allowCustomInput = true,
 }) => {
@@ -56,8 +52,6 @@ export const AvailableElementsPalette: React.FC<AvailableElementsPaletteProps> =
       {elements.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {elements.map((val, idx) => {
-            const isGuided = isGuidedSolveActive && val === guidedTargetValue;
-
             return (
               <div
                 key={`avail-${val}-${idx}`}
@@ -73,8 +67,6 @@ export const AvailableElementsPalette: React.FC<AvailableElementsPaletteProps> =
                 className={`h-11 min-w-[58px] flex-1 max-w-[100px] rounded-xl font-mono font-black text-sm flex items-center justify-center gap-1 transition-all cursor-grab active:cursor-grabbing select-none shadow-2xs ${
                   disabled
                     ? 'opacity-40 bg-slate-100 dark:bg-slate-800 text-slate-400 cursor-not-allowed'
-                    : isGuided
-                    ? 'bg-amber-400 dark:bg-amber-500 text-slate-950 border-2 border-amber-500 shadow-md ring-4 ring-amber-200 dark:ring-amber-900 scale-105 animate-bounce'
                     : 'bg-slate-50 hover:bg-blue-50 dark:bg-slate-800 dark:hover:bg-blue-950/80 text-blue-900 dark:text-blue-100 border-2 border-slate-200 hover:border-blue-500 dark:border-slate-700 dark:hover:border-blue-400 hover:scale-102'
                 }`}
               >

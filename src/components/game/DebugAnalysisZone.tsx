@@ -16,7 +16,7 @@ interface DebugAnalysisZoneProps {
   onWrongStepSelected: (step: DebugStep) => void;
   identifiedStep: DebugStep | null;
   wrongStepAttempted: DebugStep | null;
-  isGuidedSolveActive?: boolean;
+  disabled?: boolean;
 }
 
 export const DebugAnalysisZone: React.FC<DebugAnalysisZoneProps> = ({
@@ -25,7 +25,7 @@ export const DebugAnalysisZone: React.FC<DebugAnalysisZoneProps> = ({
   onWrongStepSelected,
   identifiedStep,
   wrongStepAttempted,
-  isGuidedSolveActive = false,
+  disabled = false,
 }) => {
   const [isDragOver, setIsDragOver] = useState(false);
 
@@ -81,26 +81,27 @@ export const DebugAnalysisZone: React.FC<DebugAnalysisZoneProps> = ({
 
         <div className="space-y-2">
           {debugSteps.map((step) => {
-            const isFaultyTarget = isGuidedSolveActive && step.isFaulty;
             const isSuccess = identifiedStep?.id === step.id;
 
             return (
               <div
                 key={step.id}
-                draggable
+                draggable={!disabled}
                 onDragStart={(e) => {
+                  if (disabled) return;
                   e.dataTransfer.setData('text/plain', JSON.stringify(step));
                   e.dataTransfer.effectAllowed = 'copy';
                 }}
                 onClick={() => {
+                  if (disabled) return;
                   if (step.isFaulty) onIdentifiedError(step);
                   else onWrongStepSelected(step);
                 }}
-                className={`p-3.5 rounded-xl border-2 font-mono text-xs transition-all cursor-grab active:cursor-grabbing flex items-center justify-between gap-2 shadow-2xs select-none ${
+                className={`p-3.5 rounded-xl border-2 font-mono text-xs transition-all flex items-center justify-between gap-2 shadow-2xs select-none ${
+                  disabled ? 'cursor-default opacity-90' : 'cursor-grab active:cursor-grabbing'
+                } ${
                   isSuccess
                     ? 'bg-emerald-50 dark:bg-emerald-950/60 border-emerald-500 text-emerald-900 dark:text-emerald-200 font-bold'
-                    : isFaultyTarget
-                    ? 'bg-amber-50 dark:bg-amber-950/60 border-amber-500 text-amber-950 dark:text-amber-200 ring-4 ring-amber-200 dark:ring-amber-900 animate-pulse font-bold'
                     : 'bg-slate-50 dark:bg-slate-800/80 hover:bg-blue-50 dark:hover:bg-blue-950/50 border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200 hover:border-blue-400'
                 }`}
               >
@@ -125,7 +126,7 @@ export const DebugAnalysisZone: React.FC<DebugAnalysisZoneProps> = ({
               ? 'border-emerald-500 bg-emerald-50/80 dark:bg-emerald-950/70 text-emerald-900 dark:text-emerald-200'
               : wrongStepAttempted
               ? 'border-red-500 bg-red-50/80 dark:bg-red-950/70 text-red-900 dark:text-red-200'
-              : isDragOver || isGuidedSolveActive
+              : isDragOver
               ? 'border-blue-500 bg-blue-50/80 dark:bg-blue-950/70 text-blue-900 dark:text-blue-200 ring-4 ring-blue-200 dark:ring-blue-900'
               : 'border-slate-300 dark:border-slate-700 bg-white/60 dark:bg-slate-900/60 hover:border-blue-400'
           }`}

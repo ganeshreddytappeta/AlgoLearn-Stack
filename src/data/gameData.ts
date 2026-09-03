@@ -41,13 +41,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleDescription: 'POP removes only the TOP element. Elements below the top cannot be accessed or removed directly.',
           example: 'Stack [10, 20, 30] → Pop() removes 30, leaving [10, 20].',
         },
-        guidedSolve: {
-          stepExplanation: 'The element at the top of the stack is 50. Hold and drag [50] into the POP ZONE on the right.',
-          sourceValue: 50,
-          sourceType: 'top',
-          targetZone: 'pop-zone',
-          visualPathText: 'TOP [50] ───────────────→ POP ZONE',
-        },
         feedback: {
           correctTitle: 'Correct!',
           correctActionText: '50 was popped from the TOP.',
@@ -76,13 +69,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleTitle: 'Sequential Pop Operations',
           ruleDescription: 'Every pop exposes the next most recently added element as the new top.',
           example: 'Top changes dynamically: Pop() exposes the previous item.',
-        },
-        guidedSolve: {
-          stepExplanation: 'The current active TOP is 60. Hold and drag [60] directly into the POP ZONE.',
-          sourceValue: 60,
-          sourceType: 'top',
-          targetZone: 'pop-zone',
-          visualPathText: 'TOP [60] ───────────────→ POP ZONE',
         },
         feedback: {
           correctTitle: 'Outstanding!',
@@ -113,13 +99,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleDescription: 'You cannot grab elements from the middle or bottom of a stack without popping all elements above them first.',
           example: 'To get item at index 0, you must pop all items from top down.',
         },
-        guidedSolve: {
-          stepExplanation: 'You must pop [300] first to uncover the elements below.',
-          sourceValue: 300,
-          sourceType: 'top',
-          targetZone: 'pop-zone',
-          visualPathText: 'TOP [300] ───────────────→ POP ZONE',
-        },
         feedback: {
           correctTitle: 'Great job!',
           correctActionText: '300 was successfully popped.',
@@ -148,13 +127,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleTitle: 'Empty Stack Boundary',
           ruleDescription: 'Popping the last item transitions the stack state to isEmpty = true. Popping again after this would cause Stack Underflow.',
           example: 'Size 1 → Pop() → Size 0 (isEmpty = true).',
-        },
-        guidedSolve: {
-          stepExplanation: 'Hold and drag the sole element [42] into the POP ZONE.',
-          sourceValue: 42,
-          sourceType: 'top',
-          targetZone: 'pop-zone',
-          visualPathText: 'TOP [42] ───────────────→ POP ZONE',
         },
         feedback: {
           correctTitle: 'Level 1 Complete!',
@@ -208,13 +180,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleDescription: 'PUSH inserts an element at the top of the stack and increments the size by 1.',
           example: 'Stack [10, 20] + Push(30) → Stack becomes [10, 20, 30] with 30 at TOP.',
         },
-        guidedSolve: {
-          stepExplanation: 'Grab [30] from the Available Elements and hold and drag it to the PUSH TO TOP zone above the stack.',
-          sourceValue: 30,
-          sourceType: 'available',
-          targetZone: 'push-zone',
-          visualPathText: 'AVAILABLE [30] ───────────────→ PUSH ZONE',
-        },
         feedback: {
           correctTitle: 'Correct!',
           correctActionText: '30 was pushed onto the TOP of the Stack.',
@@ -244,13 +209,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleTitle: 'Top Pointer Adjustment',
           ruleDescription: 'When Push(75) executes, the previous top (50) is now beneath 75. TOP now points to 75.',
           example: 'Before: TOP = 50. After: TOP = 75.',
-        },
-        guidedSolve: {
-          stepExplanation: 'Hold and drag [75] from the available elements to the PUSH TO TOP zone.',
-          sourceValue: 75,
-          sourceType: 'available',
-          targetZone: 'push-zone',
-          visualPathText: 'AVAILABLE [75] ───────────────→ PUSH ZONE',
         },
         feedback: {
           correctTitle: 'Well done!',
@@ -282,13 +240,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleDescription: 'When size == capacity in fixed-size stacks, isFull becomes true. Further pushes will trigger Overflow.',
           example: 'Size 4 / Capacity 4 → Stack is Full.',
         },
-        guidedSolve: {
-          stepExplanation: 'Hold and drag [40] into the PUSH ZONE to complete the 4-item stack.',
-          sourceValue: 40,
-          sourceType: 'available',
-          targetZone: 'push-zone',
-          visualPathText: 'AVAILABLE [40] ───────────────→ PUSH ZONE',
-        },
         feedback: {
           correctTitle: 'Perfect!',
           correctActionText: '40 was pushed. Stack reached full capacity (4/4).',
@@ -318,13 +269,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleTitle: 'First Push on Empty Stack',
           ruleDescription: 'When the stack is empty, the first element pushed becomes both the BOTTOM and the TOP.',
           example: 'Empty Stack → Push(100) → [100] (Bottom & Top).',
-        },
-        guidedSolve: {
-          stepExplanation: 'Hold and drag [100] into the PUSH ZONE to establish the base element of the stack.',
-          sourceValue: 100,
-          sourceType: 'available',
-          targetZone: 'push-zone',
-          visualPathText: 'AVAILABLE [100] ───────────────→ PUSH ZONE',
         },
         feedback: {
           correctTitle: 'Level 2 Complete!',
@@ -378,11 +322,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleDescription: 'Because stack insertion is strictly top-loaded, you must push elements from bottom to top in the exact required sequence.',
           example: 'Target [10, 20, 30] requires: Push(10) → Push(20) → Push(30).',
         },
-        guidedSolve: {
-          stepExplanation: 'Push sequence: 1st [10], 2nd [20], 3rd [30], 4th [40]. Hold and drag each in order.',
-          targetZone: 'push-zone',
-          visualPathText: 'Order: [10] → [20] → [30] → [40] into PUSH ZONE',
-        },
         feedback: {
           correctTitle: 'Target Stack Reconstructed!',
           correctActionText: 'Constructed [10, 20, 30, 40] with 40 at TOP.',
@@ -412,11 +351,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleTitle: 'Inverted Order Construction',
           ruleDescription: 'Whatever order you want to read from bottom to top must match your exact push sequence.',
           example: 'Target [50, 30, 10] → Push(50) → Push(30) → Push(10).',
-        },
-        guidedSolve: {
-          stepExplanation: 'Hold and drag [50] into the stack first, followed by [30], and lastly [10].',
-          targetZone: 'push-zone',
-          visualPathText: 'Order: [50] → [30] → [10] into PUSH ZONE',
         },
         feedback: {
           correctTitle: 'Target Stack Built!',
@@ -448,11 +382,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleDescription: 'Stacks are commonly used in algorithmic interviews to test palindrome sequences due to their reversal property.',
           example: 'A palindrome reads the same forwards and backwards.',
         },
-        guidedSolve: {
-          stepExplanation: 'Push order: [5] first, then both [9]s, then the final [5]. Hold and drag each into the stack.',
-          targetZone: 'push-zone',
-          visualPathText: 'Order: [5] → [9] → [9] → [5] into PUSH ZONE',
-        },
         feedback: {
           correctTitle: 'Palindrome Stack Created!',
           correctActionText: 'Built [5, 9, 9, 5] successfully.',
@@ -482,11 +411,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleTitle: 'Stack Inversion / Reversal Rule',
           ruleDescription: 'Pushing elements in order and then popping them naturally reverses the entire sequence (LIFO).',
           example: 'Push(A, B, C) → Pop() yields C, B, A.',
-        },
-        guidedSolve: {
-          stepExplanation: 'Hold and drag 1 (bottom), 2 (middle), and 3 (top) into the stack.',
-          targetZone: 'push-zone',
-          visualPathText: 'Order: [1] → [2] → [3] into PUSH ZONE',
         },
         feedback: {
           correctTitle: 'Level 3 Complete!',
@@ -547,11 +471,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleDescription: 'Maintain a mental array. Every Push appends to the right, every Pop deletes the rightmost item.',
           example: '[10, 20] + Push(30) = [10, 20, 30]. Pop() = [10, 20].',
         },
-        guidedSolve: {
-          stepExplanation: 'The final stack has 10 at bottom, 20 in middle, and 40 at TOP. Hold and drag [10], then [20], then [40].',
-          targetZone: 'push-zone',
-          visualPathText: 'Build: [10] → [20] → [40]',
-        },
         feedback: {
           correctTitle: 'Prediction Verified!',
           correctActionText: 'Final stack correctly reconstructed as [10, 20, 40].',
@@ -589,11 +508,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleTitle: 'Tracking Multiple Pops',
           ruleDescription: 'Each Pop eliminates the most recent active top. Always check the current size.',
           example: 'Push(A), Push(B), Pop() leaves [A].',
-        },
-        guidedSolve: {
-          stepExplanation: 'Final stack contains [5, 25]. Hold and drag [5] first, then [25].',
-          targetZone: 'push-zone',
-          visualPathText: 'Build: [5] → [25]',
         },
         feedback: {
           correctTitle: 'Accurate Prediction!',
@@ -633,11 +547,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleDescription: 'Consecutive pops peel away the top layers in reverse order of entry (300 then 200).',
           example: '[A, B, C] + 2 Pops = [A].',
         },
-        guidedSolve: {
-          stepExplanation: 'Hold and drag [100] to the base and [500] to the top.',
-          targetZone: 'push-zone',
-          visualPathText: 'Build: [100] → [500]',
-        },
         feedback: {
           correctTitle: 'Spot On!',
           correctActionText: 'Reconstructed [100, 500].',
@@ -675,11 +584,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleTitle: 'Transient Elements in Stacks',
           ruleDescription: 'Elements that are pushed and immediately popped leave the underlying stack structure unchanged.',
           example: 'Push(X) followed by Pop() is a net zero change to the prior stack.',
-        },
-        guidedSolve: {
-          stepExplanation: 'Final stack contains [7, 10]. Hold and drag [7] first, then [10].',
-          targetZone: 'push-zone',
-          visualPathText: 'Build: [7] → [10]',
         },
         feedback: {
           correctTitle: 'Level 4 Complete!',
@@ -737,11 +641,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleDescription: 'Calling Pop() or Peek() on an empty stack is an illegal operation resulting in an Underflow error or undefined behavior.',
           example: 'if (isEmpty()) throw new EmptyStackException();',
         },
-        guidedSolve: {
-          stepExplanation: 'Line 5: Pop() is illegal because the stack is empty (size = 0). Hold and drag Line 5 into the DEBUG ZONE.',
-          targetZone: 'debug-zone',
-          visualPathText: 'FAULTY LINE 5 ───────────────→ DEBUG ZONE',
-        },
         feedback: {
           correctTitle: 'Bug Identified: Stack Underflow!',
           correctActionText: 'Line 5 caused Stack Underflow.',
@@ -775,11 +674,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleTitle: 'Stack Overflow Exception',
           ruleDescription: 'In array-based stack implementations, pushing into a full buffer causes an index out of bounds error or memory overflow.',
           example: 'if (isFull()) throw new StackOverflowException();',
-        },
-        guidedSolve: {
-          stepExplanation: 'Line 4: Push(40) exceeds capacity (4/3). Hold and drag Line 4 to the DEBUG ZONE.',
-          targetZone: 'debug-zone',
-          visualPathText: 'FAULTY LINE 4 ───────────────→ DEBUG ZONE',
         },
         feedback: {
           correctTitle: 'Bug Identified: Stack Overflow!',
@@ -815,11 +709,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleDescription: 'The fundamental invariant of a Stack is single-ended access. Removing arbitrary indices violates the stack ADT contract.',
           example: 'Only PUSH and POP at TOP are permitted.',
         },
-        guidedSolve: {
-          stepExplanation: 'Line 4: RemoveAt(0) is illegal in a Stack ADT. Hold and drag Line 4 to the DEBUG ZONE.',
-          targetZone: 'debug-zone',
-          visualPathText: 'FAULTY LINE 4 ───────────────→ DEBUG ZONE',
-        },
         feedback: {
           correctTitle: 'Bug Identified: Illegal ADT Access!',
           correctActionText: 'Line 4 violated stack single-ended access.',
@@ -852,11 +741,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleTitle: 'PEEK Precondition',
           ruleDescription: 'Like Pop(), Peek() requires the precondition (!isEmpty()). Inspecting top[0] when empty results in a crash.',
           example: 'if (isEmpty()) return error;',
-        },
-        guidedSolve: {
-          stepExplanation: 'Line 3: Peek() on empty stack causes a crash. Hold and drag Line 3 into the DEBUG ZONE.',
-          targetZone: 'debug-zone',
-          visualPathText: 'FAULTY LINE 3 ───────────────→ DEBUG ZONE',
         },
         feedback: {
           correctTitle: 'Level 5 Complete!',
@@ -910,11 +794,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleDescription: 'Quickly push and pop as instructed to keep your multiplier at 3x.',
           example: 'Target action: PUSH 10.',
         },
-        guidedSolve: {
-          stepExplanation: 'Hold and drag 10 into the push zone to start your speed streak.',
-          targetZone: 'push-zone',
-          visualPathText: 'Push [10]',
-        },
         feedback: {
           correctTitle: 'Fast Reflexes!',
           correctActionText: 'Pushed 10. Combo x1.',
@@ -945,11 +824,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleDescription: '20 will sit on top of 10.',
           example: 'Stack becomes [10, 20].',
         },
-        guidedSolve: {
-          stepExplanation: 'Hold and drag 20 into the push zone to increase combo.',
-          targetZone: 'push-zone',
-          visualPathText: 'Push [20]',
-        },
         feedback: {
           correctTitle: 'Combo Increased!',
           correctActionText: 'Pushed 20. Combo x2!',
@@ -978,11 +852,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleTitle: 'LIFO Pop',
           ruleDescription: 'Removes 20 from the top, uncovering 10.',
           example: '[10, 20] → [10].',
-        },
-        guidedSolve: {
-          stepExplanation: 'Hold and drag 20 to the POP ZONE.',
-          targetZone: 'pop-zone',
-          visualPathText: 'Pop [20]',
         },
         feedback: {
           correctTitle: 'Max Combo!',
@@ -1014,11 +883,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleDescription: 'Pushing 30 on top of 10.',
           example: 'Stack becomes [10, 30].',
         },
-        guidedSolve: {
-          stepExplanation: 'Hold and drag 30 onto the stack.',
-          targetZone: 'push-zone',
-          visualPathText: 'Push [30]',
-        },
         feedback: {
           correctTitle: 'Combo Maintained!',
           correctActionText: 'Pushed 30 with 3x multiplier.',
@@ -1049,11 +913,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleDescription: 'Stack reaches 3 items [10, 30, 50].',
           example: '50 is now at TOP.',
         },
-        guidedSolve: {
-          stepExplanation: 'Hold and drag 50 into the push zone.',
-          targetZone: 'push-zone',
-          visualPathText: 'Push [50]',
-        },
         feedback: {
           correctTitle: 'Blazing Fast!',
           correctActionText: 'Pushed 50. 3x multiplier active!',
@@ -1082,11 +941,6 @@ export const GAME_LEVELS: GameLevelConfig[] = [
           ruleTitle: 'Final LIFO Execution',
           ruleDescription: 'Pop 50 to complete all 6 Speed Stack trials.',
           example: 'Pop(50) completes the level.',
-        },
-        guidedSolve: {
-          stepExplanation: 'Hold and drag 50 to the POP ZONE to finish!',
-          targetZone: 'pop-zone',
-          visualPathText: 'Pop [50]',
         },
         feedback: {
           correctTitle: 'Speed Run Mastered!',

@@ -25,7 +25,6 @@ interface GameHubProps {
   currentChallengeIndex: number;
   onOpenPreview: (game: GameMetaData) => void;
   onDirectContinue: (levelId: number) => void;
-  onOpenGuidedSolve?: (levelId: number) => void;
   onOpenInGameLab?: () => void;
   onUpdateProgress?: (updated: UserProgress | ((prev: UserProgress) => UserProgress)) => void;
 }
@@ -36,7 +35,6 @@ export const GameHub: React.FC<GameHubProps> = ({
   currentChallengeIndex,
   onOpenPreview,
   onDirectContinue,
-  onOpenGuidedSolve,
   onOpenInGameLab,
   onUpdateProgress,
 }) => {
