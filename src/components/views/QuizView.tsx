@@ -44,7 +44,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
   const [currentIdx, setCurrentIdx] = useState<number>(0);
   const [answers, setAnswers] = useState<Record<number, QuestionAnswerState>>({});
   const [quizFinished, setQuizFinished] = useState<boolean>(false);
-  const [reviewQuestionIdx, setReviewQuestionIdx] = useState<number | null>(null);
+  const [resultFilter, setResultFilter] = useState<'all' | 'correct' | 'incorrect'>('all');
 
   const currentQ: QuizQuestion = QUIZ_QUESTIONS[currentIdx];
   const currentAnswerState = answers[currentIdx] || {
@@ -219,7 +219,7 @@ export const QuizView: React.FC<QuizViewProps> = ({
     setCurrentIdx(0);
     setAnswers({});
     setQuizFinished(false);
-    setReviewQuestionIdx(null);
+    setResultFilter('all');
   };
 
   // Compute live score stats
@@ -230,6 +230,13 @@ export const QuizView: React.FC<QuizViewProps> = ({
   const finalScorePercent = Math.round(
     (totalCorrect / QUIZ_QUESTIONS.length) * 100
   );
+
+  const filteredQuestions = QUIZ_QUESTIONS.filter((_, idx) => {
+    const isCorrect = answers[idx]?.isCorrect ?? false;
+    if (resultFilter === 'correct') return isCorrect;
+    if (resultFilter === 'incorrect') return !isCorrect;
+    return true;
+  });
 
   return (
     <div className="space-y-6 pb-12 max-w-4xl mx-auto">
@@ -635,88 +642,208 @@ export const QuizView: React.FC<QuizViewProps> = ({
           </div>
 
           {/* 2. QUESTION-BY-QUESTION REVIEW BREAKDOWN */}
-          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xs space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
-              <div className="flex items-center gap-2">
-                <Eye className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">
-                  Question Breakdown & Answers
-                </h3>
+          <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xs space-y-6">
+            {/* Header with Title and Filter Tabs */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100 dark:border-slate-800">
+              <div>
+                <div className="flex items-center gap-2 mb-1">
+                  <Eye className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                  <h3 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white">
+                    Question Breakdown & Answers
+                  </h3>
+                </div>
+                <p className="text-xs text-slate-500 dark:text-slate-400">
+                  Review your selected answers, the verified correct answers, and explanations for all questions.
+                </p>
               </div>
-              <span className="text-xs font-mono text-slate-400">
-                {totalCorrect} of {QUIZ_QUESTIONS.length} Correct
-              </span>
+
+              {/* Dynamic Filter Tabs: All (10) | Correct (X) | Incorrect (Y) */}
+              <div className="inline-flex items-center p-1 rounded-xl bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 self-start sm:self-auto shrink-0">
+                <button
+                  type="button"
+                  onClick={() => setResultFilter('all')}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                    resultFilter === 'all'
+                      ? 'bg-blue-600 text-white shadow-2xs'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'
+                  }`}
+                >
+                  All ({QUIZ_QUESTIONS.length})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setResultFilter('correct')}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                    resultFilter === 'correct'
+                      ? 'bg-emerald-600 text-white shadow-2xs'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400'
+                  }`}
+                >
+                  Correct ({totalCorrect})
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setResultFilter('incorrect')}
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                    resultFilter === 'incorrect'
+                      ? 'bg-rose-600 text-white shadow-2xs'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-rose-600 dark:hover:text-rose-400'
+                  }`}
+                >
+                  Incorrect ({totalIncorrect})
+                </button>
+              </div>
             </div>
 
-            <div className="space-y-3">
-              {QUIZ_QUESTIONS.map((q, idx) => {
-                const ans = answers[idx];
-                const isCorrect = ans?.isCorrect;
-                const isExpanded = reviewQuestionIdx === idx;
+            {/* Question Cards List */}
+            <div className="space-y-4">
+              {filteredQuestions.map((q) => {
+                const origIdx = QUIZ_QUESTIONS.findIndex((item) => item.id === q.id);
+                const ans = answers[origIdx];
+                const isCorrect = ans?.isCorrect ?? false;
+
+                const formatQuestionType = (type: string) => {
+                  switch (type) {
+                    case 'multiple-choice':
+                      return 'MULTIPLE CHOICE';
+                    case 'predict-output':
+                      return 'PREDICT OUTPUT';
+                    case 'true-false':
+                      return 'TRUE / FALSE';
+                    case 'scenario':
+                      return 'SCENARIO ANALYSIS';
+                    case 'drag-order':
+                      return 'SEQUENCE ORDER';
+                    default:
+                      return type.toUpperCase();
+                  }
+                };
+
+                const getChosenAnswerText = () => {
+                  if (!ans || !ans.isSubmitted) return 'No answer submitted';
+                  if (q.type === 'drag-order') {
+                    return ans.draggedOrder && ans.draggedOrder.length > 0
+                      ? ans.draggedOrder.join(' ➔ ')
+                      : 'No order submitted';
+                  }
+                  return ans.selectedOption || 'No answer selected';
+                };
+
+                const getCorrectAnswerText = () => {
+                  if (Array.isArray(q.correctAnswer)) {
+                    return q.correctAnswer.join(' ➔ ');
+                  }
+                  return String(q.correctAnswer);
+                };
+
+                const questionNumber = String(origIdx + 1).padStart(2, '0');
 
                 return (
                   <div
                     key={q.id}
-                    className={`rounded-2xl border transition-all ${
-                      isCorrect
-                        ? 'border-emerald-200/80 dark:border-emerald-800/60 bg-emerald-50/30 dark:bg-emerald-950/20'
-                        : 'border-rose-200/80 dark:border-rose-800/60 bg-rose-50/30 dark:bg-rose-950/20'
-                    }`}
+                    className="rounded-2xl p-5 sm:p-6 border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/90 shadow-2xs space-y-4 transition-all"
                   >
-                    <div
-                      onClick={() =>
-                        setReviewQuestionIdx(isExpanded ? null : idx)
-                      }
-                      className="p-4 flex items-center justify-between gap-3 cursor-pointer select-none"
-                    >
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={`w-7 h-7 rounded-xl flex items-center justify-center font-mono font-bold text-xs shrink-0 ${
-                            isCorrect
-                              ? 'bg-emerald-600 text-white'
-                              : 'bg-rose-600 text-white'
-                          }`}
-                        >
-                          {idx + 1}
-                        </div>
-                        <div>
-                          <span className="text-xs font-bold text-slate-900 dark:text-slate-100 line-clamp-1">
-                            {q.question}
-                          </span>
-                          <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 block mt-0.5">
-                            {isCorrect ? '✓ Solved Correctly' : '✕ Missed Answer'}
-                          </span>
-                        </div>
+                    {/* Compact Header: 01   MULTIPLE CHOICE   ✓ Correct */}
+                    <div className="flex items-center justify-between gap-3 flex-wrap">
+                      <div className="flex items-center gap-2.5">
+                        <span className="font-mono text-xs font-black px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 border border-slate-200 dark:border-slate-700">
+                          {questionNumber}
+                        </span>
+                        <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/80 px-2 py-0.5 rounded border border-slate-200/60 dark:border-slate-700/60">
+                          {formatQuestionType(q.type)}
+                        </span>
                       </div>
 
-                      <button
-                        type="button"
-                        className="px-3 py-1 rounded-lg text-xs font-mono font-medium text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50 transition-colors"
-                      >
-                        {isExpanded ? 'Hide' : 'Explain'}
-                      </button>
+                      {/* Correct / Incorrect Status Pill */}
+                      {isCorrect ? (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold font-mono bg-emerald-50 dark:bg-emerald-950/60 text-emerald-700 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
+                          <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                          <span>Correct</span>
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold font-mono bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 border border-rose-200 dark:border-rose-800">
+                          <XCircle className="w-3.5 h-3.5" />
+                          <span>Incorrect</span>
+                        </span>
+                      )}
                     </div>
 
-                    {isExpanded && (
-                      <div className="px-4 pb-4 pt-1 text-xs space-y-2 border-t border-slate-200/60 dark:border-slate-800">
-                        <div className="pt-2 text-slate-600 dark:text-slate-300">
-                          <span className="font-bold text-slate-800 dark:text-slate-200">
-                            Correct Answer:{' '}
+                    {/* Question Text */}
+                    <h4 className="text-sm sm:text-base font-bold text-slate-900 dark:text-white leading-snug">
+                      {q.question}
+                    </h4>
+
+                    {/* Side-by-side Answer Comparison on desktop, stacked on mobile */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                      {/* Student's Chosen Answer Card */}
+                      <div
+                        className={`p-4 rounded-xl border flex flex-col justify-between transition-colors ${
+                          isCorrect
+                            ? 'bg-emerald-50/40 dark:bg-emerald-950/20 border-emerald-200/70 dark:border-emerald-800/50'
+                            : 'bg-rose-50/40 dark:bg-rose-950/20 border-rose-200/70 dark:border-rose-800/50'
+                        }`}
+                      >
+                        <div>
+                          <span className="text-[10px] font-mono font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase block mb-1.5">
+                            THE ANSWER YOU CHOSE
                           </span>
-                          <span className="font-mono text-emerald-600 dark:text-emerald-400 font-bold">
-                            {Array.isArray(q.correctAnswer)
-                              ? q.correctAnswer.join(' ➔ ')
-                              : q.correctAnswer}
+                          <p className="text-xs sm:text-sm font-semibold text-slate-900 dark:text-slate-100 leading-relaxed break-words">
+                            {getChosenAnswerText()}
+                          </p>
+                        </div>
+                        <div className="mt-3 pt-2.5 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center">
+                          {isCorrect ? (
+                            <span className="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-emerald-700 dark:text-emerald-400">
+                              <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                              <span>Your Choice (Correct)</span>
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-rose-700 dark:text-rose-400">
+                              <XCircle className="w-3.5 h-3.5" />
+                              <span>Your Choice (Incorrect)</span>
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Verified Correct Answer Card */}
+                      <div className="p-4 rounded-xl border bg-emerald-50/40 dark:bg-emerald-950/20 border-emerald-200/70 dark:border-emerald-800/50 flex flex-col justify-between">
+                        <div>
+                          <span className="text-[10px] font-mono font-bold tracking-wider text-slate-500 dark:text-slate-400 uppercase block mb-1.5">
+                            CORRECT ANSWER
+                          </span>
+                          <p className="text-xs sm:text-sm font-semibold text-slate-900 dark:text-slate-100 leading-relaxed break-words font-mono">
+                            {getCorrectAnswerText()}
+                          </p>
+                        </div>
+                        <div className="mt-3 pt-2.5 border-t border-slate-200/60 dark:border-slate-800/60 flex items-center">
+                          <span className="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-emerald-700 dark:text-emerald-400">
+                            <Check className="w-3.5 h-3.5 stroke-[2.5]" />
+                            <span>Verified Solution</span>
                           </span>
                         </div>
-                        <p className="text-slate-600 dark:text-slate-400 leading-relaxed bg-white/70 dark:bg-slate-900/70 p-3 rounded-xl border border-slate-200/70 dark:border-slate-800">
-                          💡 <strong className="text-slate-800 dark:text-slate-200">Explanation:</strong> {q.explanation}
-                        </p>
                       </div>
-                    )}
+                    </div>
+
+                    {/* Detailed Educational Explanation */}
+                    <div className="p-4 rounded-xl bg-blue-50/60 dark:bg-blue-950/40 border border-blue-200/70 dark:border-blue-800/60 text-xs sm:text-sm space-y-1.5">
+                      <div className="flex items-center gap-1.5 font-bold text-blue-900 dark:text-blue-200 text-xs font-mono uppercase tracking-wider">
+                        <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                        <span>Detailed Explanation</span>
+                      </div>
+                      <p className="text-slate-700 dark:text-slate-300 leading-relaxed text-xs sm:text-sm">
+                        {q.explanation}
+                      </p>
+                    </div>
                   </div>
                 );
               })}
+
+              {filteredQuestions.length === 0 && (
+                <div className="p-8 text-center rounded-2xl border border-dashed border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-500 font-mono text-xs">
+                  No questions found in this filter category.
+                </div>
+              )}
             </div>
           </div>
 
