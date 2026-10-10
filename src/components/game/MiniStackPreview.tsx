@@ -178,7 +178,7 @@ export const MiniStackPreview: React.FC<MiniStackPreviewProps> = ({ game }) => {
           <div className="flex flex-col items-center">
             <span className="text-[10px] font-bold text-slate-400 uppercase mb-1">Time Remaining</span>
             <div className="w-16 h-16 rounded-2xl bg-indigo-50 dark:bg-indigo-950/70 border border-indigo-200 dark:border-indigo-800 flex flex-col items-center justify-center text-indigo-700 dark:text-indigo-300 shadow-xs">
-              <span className="text-lg font-black font-mono">45s</span>
+              <span className="text-lg font-black font-mono">20s</span>
               <span className="text-[9px] uppercase font-bold text-indigo-500">Timer</span>
             </div>
           </div>

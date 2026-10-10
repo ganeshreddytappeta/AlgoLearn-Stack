@@ -42,7 +42,7 @@ interface QuestionAnswerState {
   isTimedOut?: boolean;
 }
 
-const QUESTION_TIME_LIMIT = 30; // 30 seconds time limit per question
+const QUESTION_TIME_LIMIT = 20; // 20 seconds time limit per question
 
 export const QuizView: React.FC<QuizViewProps> = ({
   progress,

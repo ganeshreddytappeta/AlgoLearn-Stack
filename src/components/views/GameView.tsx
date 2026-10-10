@@ -72,7 +72,7 @@ export const GameView: React.FC<GameViewProps> = ({
 
   // Speed State (Level 6)
   const [speedRunning, setSpeedRunning] = useState<boolean>(false);
-  const [speedTimer, setSpeedTimer] = useState<number>(45);
+  const [speedTimer, setSpeedTimer] = useState<number>(20);
   const [speedScore, setSpeedScore] = useState<number>(0);
   const [speedCombo, setSpeedCombo] = useState<number>(1);
   const [speedStep, setSpeedStep] = useState<number>(0);
@@ -145,7 +145,7 @@ export const GameView: React.FC<GameViewProps> = ({
     }
     if (currentLevel.type === 'speed') {
       setSpeedRunning(false);
-      setSpeedTimer(45);
+      setSpeedTimer(20);
       setSpeedScore(0);
       setSpeedCombo(1);
       setSpeedStep(0);
@@ -165,7 +165,7 @@ export const GameView: React.FC<GameViewProps> = ({
     }
     if (currentLevel.type === 'speed') {
       setSpeedRunning(false);
-      setSpeedTimer(45);
+      setSpeedTimer(20);
       setSpeedScore(0);
       setSpeedCombo(1);
       setSpeedStep(0);
