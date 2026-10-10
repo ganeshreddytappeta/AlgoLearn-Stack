@@ -8,11 +8,9 @@ import {
   TrendingUp,
   X,
   Layers,
-  Award,
 } from 'lucide-react';
 import { TabType, UserProgress } from '../../types';
 import { soundEffects } from '../../services/sound';
-import { calculateTotalPoints } from '../../services/pointsEngine';
 
 interface SidebarProps {
   currentTab: TabType;
@@ -49,9 +47,6 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(({
   const totalActivities = 17;
   const completedActivities = Math.min(17, completedLearn + completedLabs + completedGames + (progress.quizCompleted ? 1 : 0));
   const masteryPercentage = Math.round((completedActivities / totalActivities) * 100);
-
-  // Calculate separate Points score (0 to 100 max)
-  const totalPoints = calculateTotalPoints(progress).totalPoints;
 
   const navItems: {
     id: TabType;
@@ -112,16 +107,6 @@ export const Sidebar = forwardRef<HTMLElement, SidebarProps>(({
         text: `${masteryPercentage}%`,
         bg: 'bg-blue-50 dark:bg-blue-950/70',
         color: 'text-blue-600 dark:text-blue-400',
-      },
-    },
-    {
-      id: 'points',
-      label: 'Points',
-      icon: Award,
-      badge: {
-        text: `${totalPoints}/100`,
-        bg: 'bg-amber-50 dark:bg-amber-950/70',
-        color: 'text-amber-600 dark:text-amber-400',
       },
     },
   ];
