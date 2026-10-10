@@ -16,7 +16,6 @@ interface HeaderProps {
   progress: UserProgress;
   isSidebarOpen: boolean;
   onToggleSidebar: () => void;
-  onResetProgress?: () => void;
   onSelectTab: (tab: TabType) => void;
 }
 

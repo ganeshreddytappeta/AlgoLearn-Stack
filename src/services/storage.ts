@@ -75,7 +75,8 @@ export const INITIAL_ACHIEVEMENTS: Achievement[] = [
   },
 ];
 
-const STORAGE_KEY = 'stack_master_user_progress_v1';
+const STORAGE_KEY = 'stack_master_user_progress_v2';
+const RESET_APPLIED_KEY = 'stack_master_progress_reset_v2';
 
 const getTodayString = (): string => {
   return new Date().toISOString().split('T')[0];
@@ -102,6 +103,10 @@ export const getInitialProgress = (): UserProgress => {
     gameHintsUsed: {},
     gameGuidedSolveUsed: {},
     quizQuestionScores: {},
+    pointsData: {
+      quizAnswers: {},
+      gamePenalties: {},
+    },
     history: [
       {
         title: 'Joined Stack Master',
@@ -116,6 +121,17 @@ export const getInitialProgress = (): UserProgress => {
 export const loadProgress = (): UserProgress => {
   if (typeof window === 'undefined') return getInitialProgress();
   try {
+    // Perform guaranteed reset if reset flag is not yet marked done
+    if (localStorage.getItem(RESET_APPLIED_KEY) !== 'done') {
+      localStorage.removeItem('stack_master_user_progress_v1');
+      localStorage.removeItem('stack_master_user_progress');
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.setItem(RESET_APPLIED_KEY, 'done');
+      const initial = getInitialProgress();
+      saveProgress(initial);
+      return initial;
+    }
+
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw || raw === 'undefined' || raw === 'null' || raw.trim() === '') {
       const initial = getInitialProgress();
@@ -320,6 +336,16 @@ export const awardXP = (
 };
 
 export const resetAllProgress = (): UserProgress => {
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.removeItem('stack_master_user_progress_v1');
+      localStorage.removeItem('stack_master_user_progress');
+      localStorage.removeItem(STORAGE_KEY);
+      localStorage.setItem(RESET_APPLIED_KEY, 'done');
+    } catch {
+      // ignore
+    }
+  }
   const fresh = getInitialProgress();
   saveProgress(fresh);
   return fresh;

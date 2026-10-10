@@ -71,6 +71,10 @@ export interface UserProgress {
   gameHintsUsed?: Record<number, number>; // levelId -> count of hints used (-2 pts each)
   gameGuidedSolveUsed?: Record<number, boolean>; // levelId -> whether guided solve was used (-3 pts)
   quizQuestionScores?: Record<number, number>; // questionId (0..9) -> points earned (+4, -2, 0)
+  pointsData?: {
+    quizAnswers?: Record<number, { isCorrect: boolean; selectedOption?: string | null; submittedAt?: string }>;
+    gamePenalties?: Record<number, { hintCount?: number; hintEventKeys?: string[]; guidedSolveCount?: number; guidedSolveEventKeys?: string[] }>;
+  };
 }
 
 export type TheoryCategoryKey = '01' | '02' | '03' | '04' | '05';

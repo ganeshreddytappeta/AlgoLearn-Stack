@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { TabType, UserProgress } from './types';
-import { loadProgress, saveProgress, resetAllProgress } from './services/storage';
+import { loadProgress, saveProgress } from './services/storage';
 import { soundEffects } from './services/sound';
 import { Sidebar } from './components/layout/Sidebar';
 import { Header } from './components/layout/Header';
@@ -11,7 +11,6 @@ import { GameView } from './components/views/GameView';
 import { QuizView } from './components/views/QuizView';
 import { ProgressView } from './components/views/ProgressView';
 import { PointsView } from './components/views/PointsView';
-import { ResetConfirmationModal } from './components/common/ResetConfirmationModal';
 import { ChatbotLogo } from './components/common/ChatbotLogo';
 import { PointsToast } from './components/common/PointsToast';
 import { CheckCircle2, X } from 'lucide-react';
@@ -22,7 +21,6 @@ export default function App() {
   const [activeGameLevelId, setActiveGameLevelId] = useState<number>(1);
   const [isNavOpen, setIsNavOpen] = useState<boolean>(false);
   const [progress, setProgress] = useState<UserProgress>(() => loadProgress());
-  const [isResetModalOpen, setIsResetModalOpen] = useState<boolean>(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const sidebarRef = useRef<HTMLElement>(null);
 
@@ -104,25 +102,6 @@ export default function App() {
     });
   };
 
-  // Triggered when user clicks TOTAL RESET (opens confirmation modal)
-  const handleOpenResetModal = () => {
-    soundEffects.playClick();
-    setIsResetModalOpen(true);
-  };
-
-  // Triggered when user confirms "RESET ALL" inside modal
-  const handleConfirmReset = () => {
-    const fresh = resetAllProgress();
-    setProgress(fresh);
-    setCurrentTab('home');
-    setIsResetModalOpen(false);
-    setToastMessage('All progress has been reset successfully.');
-    soundEffects.playSuccess();
-  };
-
-  const handleCancelReset = () => {
-    setIsResetModalOpen(false);
-  };
 
   return (
     <div className="h-screen w-screen overflow-hidden bg-slate-50 dark:bg-[#0b1120] text-slate-900 dark:text-slate-100 flex antialiased selection:bg-blue-600 selection:text-white transition-colors duration-200 relative">
@@ -144,7 +123,6 @@ export default function App() {
           progress={progress}
           isSidebarOpen={isNavOpen}
           onToggleSidebar={handleToggleNav}
-          onResetProgress={handleOpenResetModal}
           onSelectTab={handleSelectTab}
         />
 
@@ -196,7 +174,6 @@ export default function App() {
           {currentTab === 'progress' && (
             <ProgressView
               progress={progress}
-              onResetProgress={handleOpenResetModal}
             />
           )}
 
@@ -222,12 +199,7 @@ export default function App() {
       {/* Floating Points Toast (Bottom-Right Corner) */}
       <PointsToast />
 
-      {/* Total Reset Confirmation Modal */}
-      <ResetConfirmationModal
-        isOpen={isResetModalOpen}
-        onClose={handleCancelReset}
-        onConfirmReset={handleConfirmReset}
-      />
+
 
       {/* Toast Notification (e.g. after successful reset) */}
       <AnimatePresence>

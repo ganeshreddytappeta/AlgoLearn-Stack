@@ -13,7 +13,6 @@ import { getTopicPointsBreakdown } from '../../services/storage';
 
 interface ProgressViewProps {
   progress: UserProgress;
-  onResetProgress?: () => void;
 }
 
 export const ProgressView: React.FC<ProgressViewProps> = ({ progress }) => {
