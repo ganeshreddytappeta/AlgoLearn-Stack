@@ -189,12 +189,6 @@ export const GameHub: React.FC<GameHubProps> = ({
                       {game.duration}
                     </span>
                   </div>
-
-                  {/* XP Reward */}
-                  <span className="font-extrabold text-amber-600 dark:text-amber-400 flex items-center gap-1 bg-amber-50 dark:bg-amber-950/50 px-2 py-0.5 rounded-md border border-amber-200 dark:border-amber-800">
-                    <Sparkles className="w-3 h-3 fill-amber-500" />
-                    +{game.xpReward} XP
-                  </span>
                 </div>
 
                 {/* Action Button: PLAY GAME */}

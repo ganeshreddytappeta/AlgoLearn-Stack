@@ -104,20 +104,12 @@ export const GamePreviewModal: React.FC<GamePreviewModalProps> = ({
         </div>
 
         {/* Quick Metadata Bar */}
-        <div className="grid grid-cols-3 gap-2 sm:gap-3 py-2 px-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 text-center">
-          <div className="flex flex-col items-center justify-center p-1">
+        <div className="grid grid-cols-2 gap-2 sm:gap-3 py-2 px-3 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800 text-center">
+          <div className="flex flex-col items-center justify-center p-1 border-r border-slate-200 dark:border-slate-700/60">
             <span className="text-[10px] font-bold uppercase text-slate-400 dark:text-slate-500">Duration</span>
             <div className="flex items-center gap-1 text-xs font-bold text-slate-800 dark:text-slate-200 mt-0.5">
               <Clock className="w-3.5 h-3.5 text-blue-500" />
               <span>{game.duration}</span>
-            </div>
-          </div>
-
-          <div className="flex flex-col items-center justify-center p-1 border-x border-slate-200 dark:border-slate-700/60">
-            <span className="text-[10px] font-bold uppercase text-slate-400 dark:text-slate-500">XP Reward</span>
-            <div className="flex items-center gap-1 text-xs font-bold text-amber-600 dark:text-amber-400 mt-0.5">
-              <Sparkles className="w-3.5 h-3.5 fill-amber-500" />
-              <span>+{game.xpReward} XP</span>
             </div>
           </div>
 

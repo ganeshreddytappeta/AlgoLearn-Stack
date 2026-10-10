@@ -56,7 +56,7 @@ export const PointsView: React.FC<PointsViewProps> = ({
             </h1>
 
             <p className="text-sm text-slate-600 dark:text-slate-400 max-w-xl leading-relaxed">
-              Track your verified academic score across Theory (36), Quiz (20), Visualizations (4), and Game Levels (40). This system is completely separate from XP.
+              Track your verified academic score across Theory (36), Quiz (20), Visualizations (4), and Game Levels (40).
             </p>
           </div>
 

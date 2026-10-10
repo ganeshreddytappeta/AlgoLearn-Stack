@@ -110,7 +110,7 @@ export const ResetConfirmationModal: React.FC<ResetConfirmationModalProps> = ({
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-slate-50 dark:bg-slate-800/60 rounded-2xl p-3.5 border border-slate-200/70 dark:border-slate-800">
               <div className="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300 font-medium">
                 <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-                <span>XP / EXP</span>
+                <span>Topic Points</span>
               </div>
               <div className="flex items-center gap-2 text-xs text-slate-700 dark:text-slate-300 font-medium">
                 <Layers className="w-3.5 h-3.5 text-purple-500 shrink-0" />
