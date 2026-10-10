@@ -13,6 +13,7 @@ import { ProgressView } from './components/views/ProgressView';
 import { PointsView } from './components/views/PointsView';
 import { ResetConfirmationModal } from './components/common/ResetConfirmationModal';
 import { ChatbotLogo } from './components/common/ChatbotLogo';
+import { PointsToast } from './components/common/PointsToast';
 import { CheckCircle2, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -217,6 +218,9 @@ export default function App() {
           }}
         />
       </div>
+
+      {/* Floating Points Toast (Bottom-Right Corner) */}
+      <PointsToast />
 
       {/* Total Reset Confirmation Modal */}
       <ResetConfirmationModal

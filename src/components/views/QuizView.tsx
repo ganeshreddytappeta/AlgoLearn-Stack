@@ -26,6 +26,7 @@ import { QuizQuestion, UserProgress } from '../../types';
 import { QUIZ_QUESTIONS } from '../../data/quizData';
 import { soundEffects } from '../../services/sound';
 import { awardXP } from '../../services/storage';
+import { triggerPointsToast } from '../../services/pointsToast';
 
 interface QuizViewProps {
   progress: UserProgress;
@@ -243,8 +244,10 @@ export const QuizView: React.FC<QuizViewProps> = ({
 
     if (isCorrect) {
       soundEffects.playSuccess();
+      triggerPointsToast(4, 'Correct Answer');
     } else {
       soundEffects.playError();
+      triggerPointsToast(-2, 'Incorrect Answer');
     }
 
     setAnswers((prev) => ({

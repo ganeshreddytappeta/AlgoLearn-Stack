@@ -23,6 +23,7 @@ import { TargetStackDisplay } from '../game/TargetStackDisplay';
 import { InGameLab } from '../game/InGameLab';
 import { GuidedSolvePanel } from '../game/GuidedSolvePanel';
 import { generateGuidedSteps, GuidedStep } from '../../services/guidedSolveEngine';
+import { triggerPointsToast } from '../../services/pointsToast';
 
 interface GameViewProps {
   progress: UserProgress;
@@ -191,6 +192,13 @@ export const GameView: React.FC<GameViewProps> = ({
     return () => clearInterval(interval);
   }, [currentLevel.type, speedRunning, speedTimer, speedStep]);
 
+  const handleRegisterMistake = (actionName = 'Incorrect Submission') => {
+    soundEffects.playError();
+    setMistakes((m) => m + 1);
+    setLevelMistakes((m) => m + 1);
+    triggerPointsToast(-1, actionName);
+  };
+
   // Trigger Level Complete Reward & Modal
   const handleTriggerLevelComplete = () => {
     soundEffects.playSuccess();
@@ -222,6 +230,10 @@ export const GameView: React.FC<GameViewProps> = ({
       completedGameLevels: completed,
       xp: alreadyCompleted ? prev.xp : prev.xp + finalGameScore,
     }));
+
+    if (!alreadyCompleted && finalGameScore > 0) {
+      triggerPointsToast(finalGameScore, `Level ${currentLevel.id} Completed`);
+    }
 
     setLevelCompletedModalOpen(true);
   };
@@ -333,7 +345,10 @@ export const GameView: React.FC<GameViewProps> = ({
       setGuidedSteps(steps);
       setGuidedStepIndex(0);
       setIsGuidedSolveActive(true);
-      setLevelGuidedSolveUsed(true);
+      if (!levelGuidedSolveUsed) {
+        setLevelGuidedSolveUsed(true);
+        triggerPointsToast(-3, 'Guided Solve Used');
+      }
       setViewMode('playing');
       setFeedbackStatus(null);
 
@@ -430,9 +445,7 @@ export const GameView: React.FC<GameViewProps> = ({
   };
 
   const handlePopInvalid = (attemptedVal: number | string) => {
-    soundEffects.playError();
-    setMistakes((m) => m + 1);
-    setLevelMistakes((m) => m + 1);
+    handleRegisterMistake('Incorrect Submission');
 
     setFeedbackStatus('incorrect');
     setFeedbackTitle('Invalid Stack Removal!');
@@ -495,9 +508,7 @@ export const GameView: React.FC<GameViewProps> = ({
       setFeedbackActionText(currentChallenge.feedback.correctActionText);
       setFeedbackLifoReason(currentChallenge.feedback.lifoReason);
     } else {
-      soundEffects.playError();
-      setMistakes((m) => m + 1);
-      setLevelMistakes((m) => m + 1);
+      handleRegisterMistake('Incorrect Submission');
 
       setFeedbackStatus('incorrect');
       setFeedbackTitle('Incorrect Push Element');
@@ -542,9 +553,7 @@ export const GameView: React.FC<GameViewProps> = ({
       setFeedbackActionText(currentChallenge.feedback.correctActionText);
       setFeedbackLifoReason(currentChallenge.feedback.lifoReason);
     } else {
-      soundEffects.playError();
-      setMistakes((m) => m + 1);
-      setLevelMistakes((m) => m + 1);
+      handleRegisterMistake('Incorrect Submission');
 
       setFeedbackStatus('incorrect');
       setFeedbackTitle('Incorrect Peek Inspection');
@@ -661,9 +670,7 @@ export const GameView: React.FC<GameViewProps> = ({
           setFeedbackActionText(currentChallenge.feedback.correctActionText);
           setFeedbackLifoReason(currentChallenge.feedback.lifoReason);
         } else {
-          soundEffects.playError();
-          setMistakes((m) => m + 1);
-          setLevelMistakes((m) => m + 1);
+          handleRegisterMistake('Incorrect Submission');
 
           setFeedbackStatus('incorrect');
           setFeedbackTitle('Target Stack Order Mismatch');
@@ -746,9 +753,7 @@ export const GameView: React.FC<GameViewProps> = ({
           handleTriggerLevelComplete();
         }
       } else {
-        soundEffects.playError();
-        setMistakes((m) => m + 1);
-        setLevelMistakes((m) => m + 1);
+        handleRegisterMistake('Incorrect Action');
         setSpeedCombo(1);
       }
     } else {
@@ -766,9 +771,7 @@ export const GameView: React.FC<GameViewProps> = ({
           handleTriggerLevelComplete();
         }
       } else {
-        soundEffects.playError();
-        setMistakes((m) => m + 1);
-        setLevelMistakes((m) => m + 1);
+        handleRegisterMistake('Incorrect Action');
         setSpeedCombo(1);
       }
     }
@@ -915,7 +918,10 @@ export const GameView: React.FC<GameViewProps> = ({
             challenge={currentChallenge}
             onOpenGuidedSolve={() => handleStartGuidedSolve()}
             isGuidedSolveActive={isGuidedSolveActive}
-            onUseHint={() => setLevelHintsUsed((prev) => prev + 1)}
+            onUseHint={() => {
+              setLevelHintsUsed((prev) => prev + 1);
+              triggerPointsToast(-2, 'Hint Used');
+            }}
           />
         )
       )}

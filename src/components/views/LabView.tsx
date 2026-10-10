@@ -17,6 +17,7 @@ import { UserProgress } from '../../types';
 import { soundEffects } from '../../services/sound';
 import { EducationalVideoPlayer } from '../lab/EducationalVideoPlayer';
 import { LESSONS_DATA, LessonData } from '../../data/labVideoData';
+import { triggerPointsToast } from '../../services/pointsToast';
 
 interface LabViewProps {
   progress: UserProgress;
@@ -352,6 +353,7 @@ export const LabView: React.FC<LabViewProps> = ({
           onLessonComplete={(completedId) => {
             if (!progress.completedLabs?.includes(completedId)) {
               soundEffects.playSuccess();
+              triggerPointsToast(10, `Visualise Lesson 0${completedId} Completed`);
               onUpdateProgress((prev) => ({
                 ...prev,
                 completedLabs: [...(prev.completedLabs || []), completedId],
