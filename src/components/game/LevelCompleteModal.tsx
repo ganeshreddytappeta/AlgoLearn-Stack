@@ -111,6 +111,9 @@ export const LevelCompleteModal: React.FC<LevelCompleteModalProps> = ({
                 {guidedSolveUsed && (
                   <div>• Guided Solve used (-3 pts)</div>
                 )}
+                {mistakes > 0 && (
+                  <div>• {mistakes} Incorrect submission{mistakes > 1 ? 's' : ''} (-{mistakes} pts)</div>
+                )}
               </div>
             </div>
           )}

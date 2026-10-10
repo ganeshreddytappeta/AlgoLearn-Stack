@@ -84,6 +84,7 @@ export const GameView: React.FC<GameViewProps> = ({
   const [activePeekValue, setActivePeekValue] = useState<number | string | null>(null);
   const [levelHintsUsed, setLevelHintsUsed] = useState<number>(0);
   const [levelGuidedSolveUsed, setLevelGuidedSolveUsed] = useState<boolean>(false);
+  const [levelMistakes, setLevelMistakes] = useState<number>(0);
 
   // Initialize or Reset Challenge State
   const setupChallenge = useCallback((challenge: GameChallenge) => {
@@ -113,6 +114,7 @@ export const GameView: React.FC<GameViewProps> = ({
   useEffect(() => {
     setLevelHintsUsed(0);
     setLevelGuidedSolveUsed(false);
+    setLevelMistakes(0);
   }, [activeLevelId]);
 
   // When active level or challenge changes, re-initialize
@@ -129,6 +131,7 @@ export const GameView: React.FC<GameViewProps> = ({
     setMistakes(0);
     setLevelHintsUsed(0);
     setLevelGuidedSolveUsed(false);
+    setLevelMistakes(0);
     onSelectLevel(levelId);
   };
 
@@ -153,6 +156,9 @@ export const GameView: React.FC<GameViewProps> = ({
     soundEffects.playClick();
     setCurrentChallengeIndex(0);
     setMistakes(0);
+    setLevelHintsUsed(0);
+    setLevelGuidedSolveUsed(false);
+    setLevelMistakes(0);
     if (challenges[0]) {
       setupChallenge(challenges[0]);
     }
@@ -198,7 +204,7 @@ export const GameView: React.FC<GameViewProps> = ({
       // Ignore
     }
 
-    const deductions = levelHintsUsed * 2 + (levelGuidedSolveUsed ? 3 : 0);
+    const deductions = levelHintsUsed * 2 + (levelGuidedSolveUsed ? 3 : 0) + levelMistakes * 1;
     const finalGameScore = Math.max(0, 20 - deductions);
 
     const alreadyCompleted = (progress.completedGameLevels || []).includes(currentLevel.id);
@@ -426,6 +432,7 @@ export const GameView: React.FC<GameViewProps> = ({
   const handlePopInvalid = (attemptedVal: number | string) => {
     soundEffects.playError();
     setMistakes((m) => m + 1);
+    setLevelMistakes((m) => m + 1);
 
     setFeedbackStatus('incorrect');
     setFeedbackTitle('Invalid Stack Removal!');
@@ -490,6 +497,7 @@ export const GameView: React.FC<GameViewProps> = ({
     } else {
       soundEffects.playError();
       setMistakes((m) => m + 1);
+      setLevelMistakes((m) => m + 1);
 
       setFeedbackStatus('incorrect');
       setFeedbackTitle('Incorrect Push Element');
@@ -536,6 +544,7 @@ export const GameView: React.FC<GameViewProps> = ({
     } else {
       soundEffects.playError();
       setMistakes((m) => m + 1);
+      setLevelMistakes((m) => m + 1);
 
       setFeedbackStatus('incorrect');
       setFeedbackTitle('Incorrect Peek Inspection');
@@ -654,6 +663,7 @@ export const GameView: React.FC<GameViewProps> = ({
         } else {
           soundEffects.playError();
           setMistakes((m) => m + 1);
+          setLevelMistakes((m) => m + 1);
 
           setFeedbackStatus('incorrect');
           setFeedbackTitle('Target Stack Order Mismatch');
@@ -738,6 +748,7 @@ export const GameView: React.FC<GameViewProps> = ({
       } else {
         soundEffects.playError();
         setMistakes((m) => m + 1);
+        setLevelMistakes((m) => m + 1);
         setSpeedCombo(1);
       }
     } else {
@@ -757,6 +768,7 @@ export const GameView: React.FC<GameViewProps> = ({
       } else {
         soundEffects.playError();
         setMistakes((m) => m + 1);
+        setLevelMistakes((m) => m + 1);
         setSpeedCombo(1);
       }
     }
@@ -836,10 +848,10 @@ export const GameView: React.FC<GameViewProps> = ({
         isOpen={levelCompletedModalOpen}
         level={currentLevel}
         xpEarned={currentLevel.xpReward}
-        mistakes={mistakes}
+        mistakes={levelMistakes}
         hasNextLevel={activeLevelId < GAME_LEVELS.length}
-        pointsEarned={Math.max(0, 20 - (levelHintsUsed * 2) - (levelGuidedSolveUsed ? 3 : 0))}
-        deductions={levelHintsUsed * 2 + (levelGuidedSolveUsed ? 3 : 0)}
+        pointsEarned={Math.max(0, 20 - (levelHintsUsed * 2) - (levelGuidedSolveUsed ? 3 : 0) - levelMistakes)}
+        deductions={levelHintsUsed * 2 + (levelGuidedSolveUsed ? 3 : 0) + levelMistakes}
         hintsUsed={levelHintsUsed}
         guidedSolveUsed={levelGuidedSolveUsed}
         onNextLevel={() => {
@@ -865,7 +877,7 @@ export const GameView: React.FC<GameViewProps> = ({
         currentChallengeIndex={currentChallengeIndex}
         totalChallenges={challenges.length}
         progress={progress}
-        mistakes={mistakes}
+        mistakes={levelMistakes}
         maxMistakes={3}
         isLabActive={viewMode === 'lab'}
         onOpenLab={() => {
@@ -881,7 +893,7 @@ export const GameView: React.FC<GameViewProps> = ({
         }}
         onOpenGuidedSolve={() => handleStartGuidedSolve()}
         isGuidedSolveActive={isGuidedSolveActive}
-        currentScore={Math.max(0, 20 - (levelHintsUsed * 2) - (levelGuidedSolveUsed ? 3 : 0))}
+        currentScore={Math.max(0, 20 - (levelHintsUsed * 2) - (levelGuidedSolveUsed ? 3 : 0) - levelMistakes)}
       />
 
       {/* 2. Interactive Guided Solve Walkthrough Panel OR Focused Question Card */}
