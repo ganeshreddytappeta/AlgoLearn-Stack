@@ -36,7 +36,6 @@ export const LabView: React.FC<LabViewProps> = ({
 }) => {
   // Active selected lesson (1 for DATA STRUCTURE, 2 for STACK OPERATIONS)
   const [selectedLessonId, setSelectedLessonId] = useState<number>(1);
-  const [autoPlayTrigger, setAutoPlayTrigger] = useState<number>(0);
 
   // Custom uploaded videos per card (optional user upload override)
   const [video1, setVideo1] = useState<CustomVideoState>({
@@ -100,7 +99,6 @@ export const LabView: React.FC<LabViewProps> = ({
   const handleLessonWatch = (lessonId: number) => {
     soundEffects.playClick();
     setSelectedLessonId(lessonId);
-    setAutoPlayTrigger(Date.now());
 
     // Smooth scroll to video player if not visible
     if (playerContainerRef.current) {
@@ -342,7 +340,6 @@ export const LabView: React.FC<LabViewProps> = ({
           activeLesson={activeLesson}
           customVideoUrl={currentCustomUrl}
           customVideoName={currentCustomName}
-          autoPlayTrigger={autoPlayTrigger}
           onUploadClick={() => {
             if (selectedLessonId === 1) {
               fileInputRef1.current?.click();
